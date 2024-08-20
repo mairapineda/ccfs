@@ -76,7 +76,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
   void saveUserResponse(QuestionActivites objActivites) {
     setState(() {
       userResponses.add(ReponseActividad(
-        codQuestion: objActivites.codQuestion ?? '',
+        codQuestion: objActivites.codQuestion,
         reponseUtilsActi: objActivites.selectedOption!,
       ));
     });
@@ -231,7 +231,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                         ),
                         child: SingleChildScrollView(
                           child: Text(
-                            objActivites.questionsActivites ?? '',
+                            objActivites.questionsActivites ?? 'La pregunta no se cargo correctamente',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color.fromARGB(255, 255, 255, 255),

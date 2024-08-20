@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 class QuestionActivites {
-  String? codQuestion;
+  String codQuestion;
   String? prenomReponActivites;
   String? questionsActivites;
   List<String> optionsActivites;
@@ -25,24 +25,24 @@ class QuestionActivites {
     this.codFichier,
     this.codActivites,
     required this.base64Fichier,
-    this.selectedOption,
-    this.hasMovedOption,
+    required this.selectedOption,
+    required this.hasMovedOption,
   });
 
   factory QuestionActivites.fromJson(Map<String, dynamic> json) {
     return QuestionActivites(
         codQuestion: json['codQuestion'],
         prenomReponActivites: json['prenomReponActivites'],
-        questionsActivites: json['questions'],
-        optionsActivites: List<String>.from(json['options']),
-        reponseActivites: List<String>.from(json['reponseActivites']),
+        questionsActivites: json['questionsActivites'],
+        optionsActivites: List<String>.from(json['optionsActivites']?? []),
+        reponseActivites: List<String>.from(json['reponseActivites']?? []),
         retourActivites: json['retourActivites'],
         tipo: json['tipo'],
         codFichier: json['codFichier'],
         codActivites: json['codActivites'],
-        base64Fichier: json['base64Fichier']
-        /*   selectedOption: json['selectedOption'] as String?,
-      hasMovedOption: false, */
+        base64Fichier: json['base64Fichier'],
+        selectedOption: json['selectedOption'] as String?,
+        hasMovedOption: false, 
         );
   }
 

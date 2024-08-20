@@ -32,22 +32,26 @@ class QuestionsActivitesService {
 
   Future<List<QuestionActivites>> obtenerQuestionxActivites(
       String codActivites) async {
-    print('$codActivites');
-    final response = await http.get(
-      Uri.parse('${urls.API_QUESTIONACTIVITES}/actv/$codActivites'),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse('${urls.API_QUESTIONACTIVITES}/actv/$codActivites'),
+      );
 
-    if (response.statusCode == 200) {
-      List<dynamic> body = jsonDecode(response.body) as List<dynamic>;
-      print(body);
-      List<QuestionActivites> expresiones = body
-          .map((item) =>
-              QuestionActivites.fromJson(item as Map<String, dynamic>))
-          .toList();
+      if (response.statusCode == 200) {
+        List<dynamic> body = jsonDecode(response.body);
+        List<QuestionActivites> expresiones = body
+            .map(
+              (dynamic item) => QuestionActivites.fromJson(item),
+            )
+            .toList();
 
-      return expresiones;
-    } else {
-      throw Exception('Failed to load questions: ${response.statusCode}');
+        return expresiones;
+      } else {
+        throw Exception('Failed to load questions: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to load questions');
     }
   }
 }
