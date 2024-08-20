@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
 class OnboardingPage1 extends StatelessWidget {
-  const OnboardingPage1({Key? key}) : super(key: key);
+  const OnboardingPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: OnboardingPagePresenter(pages: [
         OnboardingPageModel(
-          title: 'Fast, Fluid and Secure',
-          description: 'Enjoy the best of the world in the palm of your hands.',
-          imageUrl: 'https://i.ibb.co/wSjjcJW/Imagen3333.png',
-          bgColor: const Color.fromARGB(255, 206, 230, 214),
+          title: 'Rapprocher les cultures',
+          description: "« Maîtriser les expressions figées : votre porte d'entrée vers l'aisance culturelle ».",
+          imageUrl: 'https://i.ibb.co/m8mXMQ1/Imagen1111.png',
+          bgColor: const Color.fromARGB(255, 0, 80, 74),
         ),
         OnboardingPageModel(
-          title: 'Connect with your friends.',
-          description: 'Connect with your friends anytime anywhere.',
+          title: 'Des outils transformés',
+          description: "« Débloquer les expressions figées - Apprendre, enseigner, s'immerger ».",
           imageUrl: 'https://i.ibb.co/ftVZTvs/Imagen4444.png',
-          bgColor: const Color.fromARGB(255, 206, 230, 214),
+          bgColor: const Color.fromARGB(255, 0, 80, 74),
         ),
         OnboardingPageModel(
-          title: 'Bookmark your favourites',
+          title: 'Bibliothèque linguistique',
           description:
-              'Bookmark your favourite quotes to read at a leisure time.',
-          imageUrl: 'https://i.ibb.co/SwtcKJS/Imagen55.png  ',
-          bgColor:  const Color.fromARGB(255, 206, 230, 214),
+              'Accédez à notre bibliothèque de multimédias et de corpus endolingues et exolingues.',
+          imageUrl: 'https://i.ibb.co/hVVpwwR/Imagen555.png',
+          bgColor:  const Color.fromARGB(255, 0, 80, 74),
         ),
         
       ]),
@@ -78,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                         Expanded(
                           flex: 3,
                           child: Padding(
-                            padding: const EdgeInsets.all(32.0),
+                            padding: const EdgeInsets.all(8),
                             child: Image.network(
                               item.imageUrl,
                             ),
@@ -88,7 +88,7 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                             flex: 1,
                             child: Column(children: [
                               Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: const EdgeInsets.all(5),
                                 child: Text(item.title,
                                     style: Theme.of(context)
                                         .textTheme
@@ -100,9 +100,9 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                               ),
                               Container(
                                 constraints:
-                                    const BoxConstraints(maxWidth: 280),
+                                    const BoxConstraints(maxWidth: 200),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 24.0, vertical: 8.0),
+                                    horizontal: 5.0, vertical: 1.0),
                                 child: Text(item.description,
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context)
@@ -132,7 +132,7 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                           margin: const EdgeInsets.all(2.0),
                           decoration: BoxDecoration(
                               // ignore: prefer_const_constructors
-                              color: Color.fromARGB(255, 0, 0, 0),
+                              color: Color.fromARGB(255, 255, 255, 255),
                               borderRadius: BorderRadius.circular(10.0)),
                         ))
                     .toList(),
@@ -140,14 +140,14 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
 
               // Bottom buttons
               SizedBox(
-                height: 100,
+                height: 120,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
                         style: TextButton.styleFrom(
                             visualDensity: VisualDensity.comfortable,
-                            foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                            foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                             textStyle: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                         onPressed: () {
@@ -158,13 +158,13 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                     TextButton(
                       style: TextButton.styleFrom(
                           visualDensity: VisualDensity.comfortable,
-                          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                          foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                           textStyle: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         if (_currentPage == widget.pages.length - 1) {
                           widget.onFinish?.call();
-                           Navigator.pushNamed(context, '/welcome');
+                           Navigator.pushNamed(context, '/inicio');
                         } else {
                           _pageController.animateToPage(_currentPage + 1,
                               curve: Curves.easeInOutCubic,
@@ -175,7 +175,7 @@ class _OnboardingPageState extends State<OnboardingPagePresenter> {
                         children: [
                           Text(
                             _currentPage == widget.pages.length - 1
-                                ? "Finish"
+                                ? "Finir"
                                 : "Suivant",
                           ),
                           const SizedBox(width: 8),
@@ -208,5 +208,5 @@ class OnboardingPageModel {
       required this.description,
       required this.imageUrl,
       this.bgColor = Colors.blue,
-      this.textColor = const Color.fromARGB(255, 0, 0, 0)});
+      this.textColor = const Color.fromARGB(255, 255, 255, 255)});
 }

@@ -62,4 +62,25 @@ class ServicioPublico {
       return false;
     }
   }
+
+  Future<String> obtenerRol(String correo) async {
+    var urlRol = Uri.parse(
+        '${urls.API_SESION}/obtener/$correo'); 
+
+    Map<String, String> cabecera = {
+      HttpHeaders.contentTypeHeader: "application/json"
+    };
+    final respuesta = await http.get(
+      urlRol,
+      headers: cabecera,
+    );
+
+    if (respuesta.statusCode == 200) {
+      final data = jsonDecode(respuesta.body);
+      return data['nombreRol'];
+    } else {
+      print('Error: ${respuesta.statusCode}');
+      throw Exception('Error al obtener el rol: ${respuesta.statusCode}');
+    }
+  }
 }

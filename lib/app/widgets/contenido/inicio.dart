@@ -113,7 +113,7 @@ class _InicioState extends State<Inicio> {
                                   minimumSize: const Size(50, 40),
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/registre');
+                                  Navigator.pushNamed(context, '/roles');
                                 },
                                 child: const Row(
                                   mainAxisSize: MainAxisSize.min,

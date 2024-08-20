@@ -1,31 +1,36 @@
 class Utilisateur {
+  late String codUtils;
   late String nomUtils;
   late String prenomUtils;
   late String dateUtils;
-  late String photoUtils;
-  late String base64Utils;
+  late String codInstitution;
+  late String codRoles;
 
-  Utilisateur(String nom, String ape, String doc, String tip, String base64) {
+  Utilisateur(String cod, String nom, String ape, String doc, String tip,
+      String base64) {
+    codUtils = cod;
     nomUtils = nom;
     prenomUtils = ape;
     dateUtils = doc;
-    photoUtils = tip;
-    base64Utils = base64;
+    codInstitution = tip;
+    codRoles = base64;
   }
 
   Map toJson() => {
+        'codUtils': codUtils,
         'nomUtils': nomUtils,
         'prenomUtils': prenomUtils,
         'dateUtils': dateUtils,
-        'photoUtils': photoUtils,
-        'base64Utils': base64Utils,
+        'codInstitution': codInstitution,
+        'codRoles': codRoles,
       };
 
   Utilisateur.fromJson(Map<String, dynamic> json) {
+    codUtils = json['codUtils'];
     nomUtils = json['nomUtils'];
     prenomUtils = json['prenomUtils'];
     dateUtils = json['dateUtils'];
-    photoUtils = json['photoUtils'];
-    base64Utils = json['base64Utils'];
+    codInstitution = json['codInstitution'];
+    codRoles = json['codRoles'];
   }
 }

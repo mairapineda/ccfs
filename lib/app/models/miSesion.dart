@@ -3,16 +3,21 @@
 class MiSesion {
   late String id;
   late String emailAcces;
-  late String nomUtils;
   late String prenomUtils;
+  late String nomUtils;
   late String dateUtils;
+  late String codInstitution;
+  late String codRoles;
 
-  MiSesion(String id, String cor, String nom, String ape, String age) {
+  MiSesion(String id, String cor, String nom, String ape, String age,
+      String ins, String rol) {
     this.id = id;
     this.emailAcces = cor;
     this.nomUtils = nom;
     this.prenomUtils = ape;
     this.dateUtils = age;
+    this.codInstitution = ins;
+    this.codRoles = rol;
   }
 
   MiSesion.fromJson(Map<String, dynamic> json) {
@@ -21,5 +26,7 @@ class MiSesion {
     nomUtils = json['nomUtils'];
     prenomUtils = json['prenomUtils'];
     dateUtils = json['dateUtils'];
+    codInstitution = json['codInstitution'];
+    codRoles = json['codRoles'];
   }
 }

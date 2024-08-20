@@ -19,9 +19,9 @@ class _SesionState extends State<Sesion> {
   final ServicioPublico misServicios = ServicioPublico();
   bool _passwordVisible = false;
   final _frmSesion = GlobalKey<FormState>();
-  
+
   final Acces objAcces = inicializarAcces();
-  final MiSesion objSesion = MiSesion("", "", "", "", "");
+  final MiSesion objSesion = MiSesion("", "", "", "", "", "", "");
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _SesionState extends State<Sesion> {
         child: Column(
           children: <Widget>[
             const Padding(
-              padding: EdgeInsets.only(top: 40),
+              padding: EdgeInsets.only(top: 80),
               child: Text(
                 'Parler avec le corps',
                 style: TextStyle(
@@ -45,11 +45,10 @@ class _SesionState extends State<Sesion> {
               ),
             ),
             Positioned(
-              top: 0,
-              right: 0,
+              top: 20,
               child: Container(
-                width: 280,
-                height: 210,
+                width: 340,
+                height: 240,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   shape: BoxShape.rectangle,
@@ -109,8 +108,13 @@ class _SesionState extends State<Sesion> {
                               borderRadius: BorderRadius.circular(25),
                               borderSide: const BorderSide(color: Colors.white),
                             ),
-                            filled: true,
                             enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  width: 1),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   width: 1),
@@ -155,8 +159,13 @@ class _SesionState extends State<Sesion> {
                                       const BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(25),
                                 ),
-                                filled: true,
                                 enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      width: 1),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                focusedBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       color: Color.fromARGB(255, 255, 255, 255),
                                       width: 1),
@@ -192,16 +201,38 @@ class _SesionState extends State<Sesion> {
 
                                   if (await misServicios
                                       .iniciarSesion(objAcces)) {
-                                    Navigator.pushNamed(context, '/welcome');
+                                    String userRole = await misServicios.obtenerRol(objAcces.emailAcces);
+
+                                    if (userRole == 'Etudiant') {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/examen');
+                                    } else if (userRole == 'Enseignant') {
+                                      Navigator.pushReplacementNamed(
+                                          context, '/sequence');
+                                    }
                                   } else {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return const AlertDialog(
-                                          title: Text("Error!"),
+                                          backgroundColor: Color.fromARGB(
+                                              255, 206, 230, 214),
+                                          title: Text(
+                                            "Erreur!",
+                                            style: TextStyle(
+                                              color: Color(0xFFF67B70),
+                                              fontSize: 20,
+                                              fontFamily: 'MonstserratBlack',
+                                            ),
+                                          ),
                                           content: Text(
-                                            "Échec de l'authentification "
-                                            "Vérifier les données d'identification",
+                                            "Échec de l'authentification.\nVérifier les données d'identification.",
+                                            style: TextStyle(
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0),
+                                              fontSize: 15,
+                                              fontFamily: 'MonstserratSemiBold',
+                                            ),
                                           ),
                                         );
                                       },
@@ -252,7 +283,8 @@ class _SesionState extends State<Sesion> {
                                       ),
                                     ),
                                     onTap: () {
-                                      Navigator.pushNamed(context, '/registre');
+                                      Navigator.pushNamed(
+                                          context, '/registre2');
                                     },
                                   ),
                                 ),
@@ -308,7 +340,5 @@ class _SesionState extends State<Sesion> {
 }
 
 Acces inicializarAcces() {
-  return Acces("", "");
+  return Acces("", "", "");
 }
-
-

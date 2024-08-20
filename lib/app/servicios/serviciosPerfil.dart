@@ -22,7 +22,7 @@ class ServiciosPerfil {
     print(cabecera);
 
     final respuesta =
-        await http.get(Uri.parse('$urlUtilisateur/infoBasic'), headers: cabecera);
+        await http.get(Uri.parse('$urlUtilisateur/inf'), headers: cabecera);
 
     if (respuesta.statusCode == 200) {
       final jsonResponse = json.decode(respuesta.body);

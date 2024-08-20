@@ -1,19 +1,23 @@
-// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously, avoid_print
+// ignore_for_file: file_names, use_build_context_synchronously
+import 'package:ccfs/app/models/institution.dart';
 import 'package:ccfs/app/models/miSesion.dart';
 import 'package:ccfs/app/models/registre.dart';
+import 'package:ccfs/app/servicios/servicioInstitution.dart';
 import 'package:ccfs/app/servicios/servicioPublico.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:ccfs/app/models/roles.dart';
 
-class Registrar extends StatefulWidget {
-  const Registrar({super.key});
+class Registrer extends StatefulWidget {
+  final LesRoles? selectedRole;
+  const Registrer({Key? key, this.selectedRole}) : super(key: key);
 
   @override
-  State<Registrar> createState() => _RegistreState();
+  State<Registrer> createState() => _RegistreState();
 }
 
-class _RegistreState extends State<Registrar> {
+class _RegistreState extends State<Registrer> {
   final TextEditingController _cajaCorreo = TextEditingController();
   final TextEditingController _cajaClave = TextEditingController();
   final TextEditingController _cajaReClave = TextEditingController();
@@ -22,30 +26,41 @@ class _RegistreState extends State<Registrar> {
   final TextEditingController _cajaPrenom = TextEditingController();
 
   final ServicioPublico misServicios = ServicioPublico();
+  final InstitucionService misServicio = InstitucionService();
   bool _passwordVisible = false;
-  bool _confirmPasswordVisible =false;
+  bool _confirmPasswordVisible = false;
+  Future<List<Institution>> objInstitution = Future(() => []);
+  List<Institution> instituciones = [];
+  Institution? _selectedInstitution;
+
   final _frmSesion = GlobalKey<FormState>();
-
   final Registre objRegistre = inicializarRegistre();
-  final MiSesion objSesion = MiSesion("", "", "", "", "");
-  
+  final MiSesion objSesion = MiSesion("", "", "", "", "", "", "");
 
-/*   Widget OpcionesDocente(){
-    return Column( children: [Text('bien')],);
-  } */
+  @override
+  void initState() {
+    super.initState();
+    objInstitution = misServicio.obtenerInstitution();
+    objInstitution.then((value) {
+      setState(() {
+        instituciones = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: 1000,
+          height: 1200,
           decoration: const BoxDecoration(
             color: Color.fromARGB(255, 0, 80, 74),
           ),
           child: Column(
             children: <Widget>[
               const Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 80),
                 child: Text(
                   'Parler avec le corps',
                   style: TextStyle(
@@ -57,8 +72,8 @@ class _RegistreState extends State<Registrar> {
               ),
               Positioned(
                 child: Container(
-                  width: 280,
-                  height: 210,
+                  width: 340,
+                  height: 240,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     shape: BoxShape.rectangle,
@@ -121,8 +136,13 @@ class _RegistreState extends State<Registrar> {
                                 borderSide:
                                     const BorderSide(color: Colors.white),
                               ),
-                              filled: true,
                               enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    width: 1),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: Color.fromARGB(255, 255, 255, 255),
                                     width: 1),
@@ -151,13 +171,10 @@ class _RegistreState extends State<Registrar> {
                                   fontFamily: 'MonstserratSemiBold',
                                 ),
                                 controller: _cajaNom,
-                                validator: (textoClave) {
-                                  String patron =
-                                      r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$";
-                                  if (textoClave!.isEmpty) {
+                                validator: (texto) {
+                                  if (texto!.isEmpty) {
                                     return "Entrer le Nom";
                                   }
-                                  if (!RegExp(patron).hasMatch(textoClave)) {}
                                   return null;
                                 },
                                 decoration: InputDecoration(
@@ -166,8 +183,14 @@ class _RegistreState extends State<Registrar> {
                                         const BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color:
                                             Color.fromARGB(255, 255, 255, 255),
@@ -199,13 +222,10 @@ class _RegistreState extends State<Registrar> {
                                   fontFamily: 'MonstserratSemiBold',
                                 ),
                                 controller: _cajaPrenom,
-                                validator: (textoClave) {
-                                  String patron =
-                                      r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$";
-                                  if (textoClave!.isEmpty) {
+                                validator: (texto) {
+                                  if (texto!.isEmpty) {
                                     return "Entrer le Prenom";
                                   }
-                                  if (!RegExp(patron).hasMatch(textoClave)) {}
                                   return null;
                                 },
                                 decoration: InputDecoration(
@@ -214,8 +234,14 @@ class _RegistreState extends State<Registrar> {
                                         const BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color:
                                             Color.fromARGB(255, 255, 255, 255),
@@ -246,6 +272,12 @@ class _RegistreState extends State<Registrar> {
                                 TextFormField(
                                   keyboardType: TextInputType.text,
                                   controller: _cajaFecha,
+                                  validator: (texto) {
+                                    if (texto!.isEmpty) {
+                                      return "Entrer le Date de naissance";
+                                    }
+                                    return null;
+                                  },
                                   style: const TextStyle(
                                     color: Color.fromARGB(255, 255, 255, 255),
                                     fontSize: 12,
@@ -269,7 +301,7 @@ class _RegistreState extends State<Registrar> {
                                               onPrimary: Color.fromARGB(
                                                   255, 206, 230, 214),
                                               surface: Color.fromARGB(
-                                                  255, 39, 176, 76),
+                                                  255, 206, 230, 214),
                                               onSurface: Color.fromARGB(
                                                   255, 0, 80, 74),
                                             ),
@@ -313,8 +345,14 @@ class _RegistreState extends State<Registrar> {
                                           const BorderSide(color: Colors.white),
                                       borderRadius: BorderRadius.circular(25),
                                     ),
-                                    filled: true,
                                     enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
                                       borderSide: const BorderSide(
                                           color: Color.fromARGB(
                                               255, 255, 255, 255),
@@ -326,12 +364,12 @@ class _RegistreState extends State<Registrar> {
                               ],
                             ),
                           ),
-                          /* const SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "Âge",
+                                "Intitution",
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontFamily: 'MonstserratBold',
@@ -339,25 +377,30 @@ class _RegistreState extends State<Registrar> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              TextFormField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 12,
-                                  fontFamily: 'MonstserratSemiBold',
-                                ),
-                                controller: _cajaAge,
-                                validator: (textoEdad) {
-                                  if (textoEdad!.isEmpty) {
-                                    return "Entrer l'âge";
-                                  }
-                                  if (int.tryParse(textoEdad) == null) {
-                                    return "L'âge doit être un nombre entier";
-                                  }
-                                  return null;
+                              DropdownButtonFormField<Institution>(
+                                dropdownColor:
+                                    const Color.fromARGB(255, 206, 230, 214),
+                                iconEnabledColor: const Color(0xFFF67B70),
+                                value: _selectedInstitution,
+                                items: instituciones
+                                    .map((Institution instituciones) {
+                                  return DropdownMenuItem<Institution>(
+                                    value: instituciones,
+                                    child: Text(
+                                      instituciones.prenomInstitution,
+                                      style: const TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        fontSize: 12,
+                                        fontFamily: 'MonstserratSemiBold',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (Institution? newValue) {
+                                  setState(() {
+                                    _selectedInstitution = newValue!;
+                                  });
                                 },
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -365,7 +408,6 @@ class _RegistreState extends State<Registrar> {
                                         const BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color:
@@ -373,12 +415,23 @@ class _RegistreState extends State<Registrar> {
                                         width: 1),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
                                 ),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return "Sélectionner une Istitution";
+                                  }
+                                  return null;
+                                },
                               ),
                             ],
                           ),
-                           */
-                          
                           const SizedBox(height: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -418,8 +471,14 @@ class _RegistreState extends State<Registrar> {
                                         const BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color:
                                             Color.fromARGB(255, 255, 255, 255),
@@ -429,8 +488,8 @@ class _RegistreState extends State<Registrar> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _passwordVisible
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
                                       size: 15,
                                       color: const Color(0xFFF67B70),
                                     ),
@@ -481,8 +540,14 @@ class _RegistreState extends State<Registrar> {
                                         const BorderSide(color: Colors.white),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
                                         color:
                                             Color.fromARGB(255, 255, 255, 255),
@@ -492,8 +557,8 @@ class _RegistreState extends State<Registrar> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _confirmPasswordVisible
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
                                       size: 15,
                                       color: const Color(0xFFF67B70),
                                     ),
@@ -521,23 +586,60 @@ class _RegistreState extends State<Registrar> {
                                       objRegistre.prenomUtils =
                                           _cajaPrenom.text;
                                       objRegistre.dateUtils = _cajaFecha.text;
-                                      /*  int? age = int.parse(_cajaAge.text);
-                                      objRegistre.ageUtils = age; */
                                       objRegistre.passeAcces = _cajaClave.text;
-
+                                      if (_selectedInstitution != null) {
+                                        objRegistre.codInstitution =
+                                            _selectedInstitution!
+                                                .codInstitution;
+                                      } else {
+                                        ("la Institution no está seleccionado");
+                                        return;
+                                      }
+                                      if (widget.selectedRole != null) {
+                                        objRegistre.codRoles =
+                                            widget.selectedRole!.codRoles;
+                                      } else {
+                                        ("El rol no está seleccionado");
+                                        return;
+                                      }
                                       if (await misServicios
                                           .registrarUsuario(objRegistre)) {
-                                        Navigator.pushNamed(
-                                            context, '/welcome');
+                                        if (widget.selectedRole!.prenomRoles ==
+                                            'Etudiant') {
+                                          // Habilitar examen
+                                          Navigator.pushNamed(
+                                              context, '/examen');
+                                        } else if (widget
+                                                .selectedRole!.prenomRoles ==
+                                            'Enseignant') {
+                                          // Habilitar secuencia
+                                          Navigator.pushNamed(
+                                              context, '/sequence');
+                                        }
                                       } else {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return const AlertDialog(
-                                              title: Text("Error!"),
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 206, 230, 214),
+                                              title: Text(
+                                                "Erreur!",
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 0, 80, 74),
+                                                  fontSize: 24,
+                                                  fontFamily: 'DidotRegular',
+                                                ),
+                                              ),
                                               content: Text(
-                                                "Échec de l'authentification"
-                                                "Vérifier les données d'identification",
+                                                "Échec de l'authentification\nVérifier les données d'identification",
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 0, 0, 0),
+                                                  fontSize: 18,
+                                                  fontFamily: 'DidotRegular',
+                                                ),
                                               ),
                                             );
                                           },
@@ -546,7 +648,7 @@ class _RegistreState extends State<Registrar> {
                                       }
                                     }
                                   } catch (e) {
-                                    print(e);
+                                    (e);
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -646,10 +748,11 @@ class _RegistreState extends State<Registrar> {
       _cajaFecha.text = "";
       _cajaNom.text = "";
       _cajaPrenom.text = "";
+      _cajaReClave.text = "";
     });
   }
 }
 
 Registre inicializarRegistre() {
-  return Registre("", "", "", "", "","");
+  return Registre("", "", "", "", "", "", "", "");
 }

@@ -1,12 +1,13 @@
 
-import 'dart:convert';
 
 import 'package:ccfs/app/models/utilisateur.dart';
 import 'package:ccfs/app/servicios/serviciosPerfil.dart';
 import 'package:flutter/material.dart';
 
+
 class Perfil extends StatefulWidget {
-  const Perfil({super.key});
+  final Utilisateur codUtils;
+  const Perfil({super.key, required this.codUtils});
 
   @override
   State<Perfil> createState() => _PerfilState();
@@ -15,7 +16,7 @@ class Perfil extends StatefulWidget {
 class _PerfilState extends State<Perfil> {
   final ServiciosPerfil misServiciosPerfil = ServiciosPerfil();
   late Future<Utilisateur> objUtilisateur =
-      Future(() => Utilisateur('', '', '', '',  '',));
+      Future(() => Utilisateur('', '', '', '','',''));
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _PerfilState extends State<Perfil> {
   }
 
   Widget _buildUserProfile(Utilisateur utilisateur) {
-    var imagenSitio = const Base64Decoder().convert(utilisateur.base64Utils);
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SizedBox(
@@ -83,11 +84,7 @@ class _PerfilState extends State<Perfil> {
             padding: const EdgeInsets.all(10),
             child: Row(
               children: [
-                Image.memory(
-                  imagenSitio,
-                  fit: BoxFit.contain,
-                  height: 80,
-                ),
+             
               ],
                   ),
                 ),
@@ -116,13 +113,7 @@ class _PerfilState extends State<Perfil> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  'Telefono: ${utilisateur.photoUtils}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                  ),
-                ),
+                
                 IconButton(
                   icon: const Icon(Icons.edit),
                    color: const Color.fromARGB(255, 255, 255, 255), 

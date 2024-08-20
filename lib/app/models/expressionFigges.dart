@@ -2,7 +2,7 @@
 
 class Expression {
   late dynamic codCorps;
-  late String codFigees;
+  late dynamic codFigees;
   late String prenomFigees;
   late String definitionFigees;
   late String originFigees;
@@ -11,7 +11,7 @@ class Expression {
   late String base64Figees;
   late String base64MultiFigees;
 
-  Expression(dynamic cod, String codf, String pre, String def, String org,
+  Expression(dynamic cod, dynamic codf, String pre, String def, String org,
       String ph, String mul, String base64, String basem) {
     codCorps = cod;
     codFigees = codf;
@@ -37,7 +37,7 @@ class Expression {
       };
   Expression.fromJson(Map<String, dynamic> json) {
     codCorps = json['codCorps'] as dynamic;
-    codFigees = json['codFigees'] as String;
+    codFigees = json['codFigees'] as dynamic;
     prenomFigees = json['prenomFigees'] as String;
     definitionFigees = json['definitionFigees'] as String;
     originFigees = json['originFigees'] as String;

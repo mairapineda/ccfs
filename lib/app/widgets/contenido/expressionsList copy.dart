@@ -1,20 +1,28 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:ccfs/app/servicios/servicioFigges.dart';
+import 'package:ccfs/app/widgets/contenido/actividades.dart';
+/* import 'package:ccfs/app/widgets/contenido/activites.dart';
+import 'package:ccfs/app/widgets/utils/slider.dart'; */
 import 'package:flutter/material.dart';
 import 'package:ccfs/app/models/expressionFigges.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ExpressionsList1 extends StatefulWidget {
-  final Expression objfigees;
+class ExpressionsList2 extends StatefulWidget {
+  final Expression codFigees;
 
-  const ExpressionsList1({super.key, required this.objfigees});
+  const ExpressionsList2({super.key, required this.codFigees,});
 
   @override
-  _ExpressionsList1State createState() => _ExpressionsList1State();
+  _ExpressionsList2State createState() => _ExpressionsList2State();
 }
 
-class _ExpressionsList1State extends State<ExpressionsList1> {
+class _ExpressionsList2State extends State<ExpressionsList2> {
+  final FiggesService misServicios = FiggesService();
+  late Future<Expression> objExpression =
+      Future(() => Expression('', '', '', '', '', '', '', '', ''));
+
   late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   bool _isPaused = false;
@@ -25,6 +33,7 @@ class _ExpressionsList1State extends State<ExpressionsList1> {
   @override
   void initState() {
     super.initState();
+    objExpression = misServicios.obtenerExpression(widget.codFigees.codFigees);
     _audioPlayer = AudioPlayer();
 
     _audioPlayer.positionStream.listen((position) {
@@ -51,7 +60,7 @@ class _ExpressionsList1State extends State<ExpressionsList1> {
     });
 
     // Precargar la imagen
-    _imageBytes = const Base64Decoder().convert(widget.objfigees.base64Figees);
+    _imageBytes = const Base64Decoder().convert(widget.codFigees.base64Figees);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       precacheImage(MemoryImage(_imageBytes), context);
     });
@@ -71,13 +80,13 @@ class _ExpressionsList1State extends State<ExpressionsList1> {
         await _audioPlayer.play();
       } else {
         Uint8List bytes =
-            const Base64Decoder().convert(widget.objfigees.base64MultiFigees);
+            const Base64Decoder().convert(widget.codFigees.base64MultiFigees);
         await _audioPlayer.setAudioSource(
             AudioSource.uri(Uri.dataFromBytes(bytes, mimeType: 'audio/mpeg')));
         await _audioPlayer.play();
       }
     } catch (e) {
-      print('Error al reproducir/pausar el audio: $e');
+      ('Error al reproducir/pausar el audio: $e');
     }
   }
 
@@ -88,7 +97,7 @@ class _ExpressionsList1State extends State<ExpressionsList1> {
         _position = position;
       });
     } catch (e) {
-      print('Error al buscar en el audio: $e');
+      ('Error al buscar en el audio: $e');
     }
   }
 
@@ -103,176 +112,214 @@ class _ExpressionsList1State extends State<ExpressionsList1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 260,
-                child: ClipRRect(
-                  child: Image.memory(
-                    _imageBytes,
-                    fit: BoxFit.cover,
+      backgroundColor: const Color.fromARGB(255, 0, 80, 74),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 340,
+                  child: ClipRRect(
+                    child: Image.memory(
+                      _imageBytes,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              child: SizedBox(
-                height: 56.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_rounded,
-                          color: Color.fromARGB(255, 255, 255, 255)),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/welcome');
-                      },
-                    ),
-                    Text(
-                      widget.objfigees.prenomFigees,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'DidotBold',
-                        color: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const Opacity(
-                      opacity: 0.0,
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios_rounded),
-                        onPressed: null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 260,
-            left: 0,
-            right: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 0, 80, 74),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(255, 255, 255, 255)
-                        .withOpacity(0.1),
-                    blurRadius: 4.0,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      activeTrackColor: Color.fromARGB(255, 89, 135, 172),
-                      inactiveTrackColor:
-                          const Color.fromARGB(255, 46, 161, 88),
-                      trackHeight: 2.0,
-                      thumbColor: const Color.fromARGB(255, 255, 255, 255),
-                      thumbShape:
-                          const RoundSliderThumbShape(enabledThumbRadius: 7),
-                      overlayColor: const Color.fromARGB(255, 0, 0, 0).withAlpha(22),
-                    
-                    ),
-                    child: Slider(
-                      value: _position.inSeconds.toDouble(),
-                      min: 0.0,
-                      max: _duration.inSeconds.toDouble(),
-                      onChanged: (value) {
-                        _seekAudio(Duration(seconds: value.toInt()));
-                      },
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
                     children: [
-                      Text(
-                        _formatDuration(_position),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.backwardStep,
-                                color: Colors.white, size: 13),
-                            onPressed: () {
-                              _seekAudio(
-                                  _position - const Duration(seconds: 5));
-                            },
-                          ),
                           IconButton(
                             icon: FaIcon(
                               _isPlaying
-                                  ? FontAwesomeIcons.pause
-                                  : FontAwesomeIcons.play,
+                                  ? FontAwesomeIcons.solidCirclePause
+                                  : FontAwesomeIcons.solidCirclePlay,
                               color: Colors.white,
-                              size: 13,
+                              size: 26,
                             ),
                             onPressed: _playPauseAudio,
                           ),
-                          IconButton(
-                            icon: const FaIcon(FontAwesomeIcons.forwardStep,
-                                color: Colors.white, size: 13),
-                            onPressed: () {
-                              _seekAudio(
-                                  _position + const Duration(seconds: 5));
-                            },
+                          Expanded(
+                            child: SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                activeTrackColor:
+                                    const Color.fromARGB(255, 129, 111, 51),
+                                inactiveTrackColor:
+                                    const Color.fromARGB(255, 255, 255, 255),
+                                trackHeight: 5,
+                                thumbShape: SliderComponentShape.noThumb,
+                                overlayColor:
+                                    const Color.fromARGB(255, 255, 255, 255)
+                                        .withAlpha(22),
+                              /*   trackShape: RoundedInactiveTrackShape(), */
+                              ),
+                              child: Slider(
+                                value: _position.inSeconds.toDouble(),
+                                min: 0.0,
+                                max: _duration.inSeconds.toDouble(),
+                                onChanged: (value) {
+                                  _seekAudio(Duration(seconds: value.toInt()));
+                                },
+                              ),
+                            ),
+                          ),
+                          Text(
+                            _formatDuration(_duration - _position),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 12),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 5),
                       Text(
-                        _formatDuration(_duration),
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12),
+                        widget.codFigees.prenomFigees,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'DidotBold',
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 15),
+                      Card(
+                        color: const Color.fromARGB(255, 255, 255, 255)
+                            .withOpacity(0.4),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Définition",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'DidotBold',
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                widget.codFigees.definitionFigees,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'DidotRegular',
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "Origine",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'DidotBold',
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                widget.codFigees.originFigees,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'DidotRegular',
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: const BorderSide(color: Colors.white),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              minimumSize: const Size(50, 40),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/roles');
+                            },
+                            child: const Text(
+                              "Example",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                              width: 20), // Espacio entre los botones
+                          OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: const BorderSide(color: Colors.white),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              minimumSize: const Size(50, 40),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ActivitesxFigees(
+                                      codFigees: widget.codFigees),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Activites",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      "Définition: ${widget.objfigees.definitionFigees.split('T')[0]}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'DidotRegular',
-                        color: Color.fromARGB(255, 255, 255, 255),
+                ),
+              ],
+            ),
+            Positioned(
+              child: SafeArea(
+                child: SizedBox(
+                  height: 56.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_rounded,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      "Origine: ${widget.objfigees.originFigees.split('T')[0]}",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'DidotRegular',
-                        color: Color.fromARGB(255, 255, 255, 255),
+                      const Opacity(
+                        opacity: 0.0,
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back_ios_rounded),
+                          onPressed: null,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

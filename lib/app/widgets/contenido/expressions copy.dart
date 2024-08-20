@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+/* // ignore_for_file: file_names
 
 import 'dart:convert';
 import 'package:ccfs/app/models/expressionFigges.dart';
@@ -82,7 +82,7 @@ Widget _generarCard(BuildContext context, Expression objfigees) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ExpressionsList1(objfigees: objfigees),
+          builder: (context) => ExpressionsList2(codFigees: objfigees),
         ),
       );
     },
@@ -154,3 +154,4 @@ Widget _generarCard(BuildContext context, Expression objfigees) {
     ),
   );
 }
+ */

@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:ccfs/app/models/partieCorps.dart';
 import 'package:ccfs/app/servicios/servicioCorps.dart';
-import 'package:ccfs/app/widgets/contenido/expressions%20copy.dart';
 import 'package:ccfs/app/utilities/globals.dart' as globals;
+import 'package:ccfs/app/widgets/contenido/expresionxcorps.dart';
 
 import 'package:flutter/material.dart';
 
@@ -19,6 +18,15 @@ class _CorpsPageState extends State<CorpsPage> {
   final CorpsService misServicios = CorpsService();
   late Future<List<PartieduCorps>> objPartieduCorps = Future(() => []);
   List<PartieduCorps>? arrPartieduCorps = [];
+  final List<String> _imagePaths = [
+    'images/img/C1.png',
+    'images/img/C2.png',
+    'images/img/C3.png',
+    'images/img/C4.png',
+    'images/img/C5.png',
+    'images/img/C6.png',
+    'images/img/C7.png',
+  ];
 
   @override
   void initState() {
@@ -101,7 +109,8 @@ class _CorpsPageState extends State<CorpsPage> {
                           arrPartieduCorps!.elementAt(index);
                       return Align(
                         alignment: Alignment.center,
-                        child: _generarTarjeta(context, objPartieduCorps),
+                        child: _generarTarjeta(
+                            context, objPartieduCorps, index, _imagePaths),
                       );
                     },
                   ),
@@ -121,58 +130,64 @@ class _CorpsPageState extends State<CorpsPage> {
   }
 }
 
-Widget _generarTarjeta(BuildContext context, PartieduCorps corps) {
+Widget _generarTarjeta(BuildContext context, PartieduCorps corps, int index,
+    List<String> imagePaths) {
   var imagenCorps = const Base64Decoder().convert(corps.base64Corps);
   return GestureDetector(
     onTap: () {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ExpresionxCorps(codCorps: corps),
-        ),
+            builder: (context) => ExpresionxCorps(codCorps: corps)),
       );
     },
     child: Container(
-      width: 120,
-      height: 120,
-      margin: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 206, 230, 214),
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 0, 80, 74).withOpacity(0.5),
-            offset: const Offset(3, 3),
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: 100,
+                height: 120,
+                margin: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    image: AssetImage(imagePaths[index % imagePaths.length]),
+                  ),
+                ),
+              ),
+              Container(
+                width: 100,
+                height: 80,
+                margin: const EdgeInsets.only(top: 10.0),
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    image: MemoryImage(imagenCorps),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 2),
+                child: Text(
+                  corps.prenomCorps,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'DidotBold',
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
         ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.memory(
-                  imagenCorps,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                corps.prenomCorps,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'DidotBold',
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
       ),
     ),
   );

@@ -36,13 +36,16 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_sign_in: ^5.0.7  
   font_awesome_flutter: ^10.4.0
+  material_design_icons_flutter: ^5.0.5955
+  eva_icons_flutter: ^3.1.0
   salomon_bottom_bar: ^3.3.1 
-  audioplayers: ^5.2.1
-  audioplayers_web: ^4.1.0
-  path_provider: ^2.0.11 
+  audioplayers: ^6.0.0
+  audioplayers_web: ^5.0.0
+  path_provider: ^2.0.11
   http:
+  mdi:
+  wave: ^0.2.0
   cryptography: 
   jwt_decoder:
   flutter_map:
@@ -54,12 +57,24 @@ dependencies:
   json_annotation:
   build_runner:
   flutter_screenutil: ^5.9.3
-  flutter_svg: ^2.0.10+1
   carousel_slider: ^4.2.1
   flutter_sound: ^9.2.13
   flutter_sound_platform_interface: ^9.2.13
   audio_session: ^0.1.6
   just_audio: ^0.9.18
+  flutter_svg: ^1.0.3
+  syncfusion_flutter_pdfviewer: ^20.3.47
+  just_waveform : ^0.0.3
+  shared_preferences: ^2.0.13
+  percent_indicator: ^4.2.2
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+  media_kit_libs_video: ^1.0.4
+
+  
+  
+ 
+  
  
  
   
@@ -70,17 +85,34 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.1"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   json_serializable:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/icons/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icons/icon.png"
 # The following section is specific to Flutter packages.
 flutter:
 
@@ -97,6 +129,23 @@ flutter:
     - images/base/FrameR.png
     - images/base/FrameL.png
     - images/base/Frame4.png
+    - images/img/Corps.png
+    - images/img/Corps1.png
+    - images/img/corps2.png
+    - images/img/corps3.png
+    - images/img/corps4.png
+    - images/img/corps5.png
+    - images/img/corps6.png
+    - images/img/C1.png
+    - images/img/C2.png
+    - images/img/C3.png
+    - images/img/C4.png
+    - images/img/C5.png
+    - images/img/C6.png
+    - images/img/C7.png
+ 
+
+  
 
 
 

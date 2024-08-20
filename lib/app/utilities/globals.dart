@@ -2,7 +2,7 @@ library globals;
 
 import 'package:ccfs/app/models/miSesion.dart';
 
-MiSesion objSesion = MiSesion('', '', '', '','');
+MiSesion objSesion = MiSesion('', '', '', '', '', '', '');
 String base64Usuario = '';
 String token = '';
-int codUtils = -1;
+String codUtils ='';

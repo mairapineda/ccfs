@@ -65,16 +65,24 @@ class FiggesService {
   }
   }
  */
-  Future<Expression> obtenerExpression(String codFigees) async {
-    var urlSesion = Uri.parse('${urls.API_SITIOS}/one/$codFigees');
+Future<Expression> obtenerExpression(String codFigees) async {
+  try {
+    var urlSesion = Uri.parse('${urls.API_FIGGES}/one/$codFigees');
+    
     Map<String, String> cabecera = {
       HttpHeaders.contentTypeHeader: "application/json",
     };
     final respuesta = await http.get(urlSesion, headers: cabecera);
+   
     if (respuesta.statusCode == 200) {
       return Expression.fromJson(jsonDecode(respuesta.body));
     } else {
       throw Exception("Error en la consulta de los datos");
     }
+  } catch (e) {
+    print('Error: $e');
+    rethrow;
   }
+}
+
 }
