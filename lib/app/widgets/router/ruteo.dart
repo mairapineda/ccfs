@@ -1,6 +1,7 @@
 import 'package:ccfs/app/widgets/contenido/ExpressionsList.dart';
 import 'package:ccfs/app/widgets/contenido/corps.dart';
 import 'package:ccfs/app/widgets/contenido/ejem.dart';
+import 'package:ccfs/app/widgets/contenido/examenCorps.dart';
 import 'package:ccfs/app/widgets/contenido/examenEtudiant.dart';
 import 'package:ccfs/app/widgets/contenido/inicio.dart';
 import 'package:ccfs/app/widgets/contenido/inicio2.dart';
@@ -26,6 +27,7 @@ Map<String, Widget Function(BuildContext)> obtenerRutas(BuildContext context) {
     '/profile': (context) => const ProfilePage(),
     '/sequence': (context) => const SequenceEnseignant(),
     '/examen': (context) => const ExamenEtudiant(),
+   
 
   };
 }

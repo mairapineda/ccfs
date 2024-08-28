@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 class ReponseActividad {
   String codQuestion;
   String reponseUtilsActi;
@@ -14,14 +16,15 @@ class ReponseActividad {
         reponseUtilsActi = json['reponseUtilsActi'];
 }
 
-
 class ReponseUtilisateurActivites {
-  String codActivites;
+  dynamic codActivites;
   String codUtils;
   List<ReponseActividad> reponseActividad;
 
-  ReponseUtilisateurActivites({
-     required this.codActivites, required this.codUtils, required this.reponseActividad});
+  ReponseUtilisateurActivites(
+      {required this.codActivites,
+      required this.codUtils,
+      required this.reponseActividad});
 
   Map<String, dynamic> toJson() => {
         'codActivites': codActivites,

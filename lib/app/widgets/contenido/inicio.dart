@@ -20,7 +20,7 @@ class _InicioState extends State<Inicio> {
         child: Column(
           children: <Widget>[
             const Padding(
-              padding: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top: 50),
               child: Text(
                 'Parler avec le corps',
                 style: TextStyle(
@@ -31,7 +31,7 @@ class _InicioState extends State<Inicio> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 0),
+              padding: const EdgeInsets.only(top: 20),
               child: Container(
                 width: 230,
                 height: 190,

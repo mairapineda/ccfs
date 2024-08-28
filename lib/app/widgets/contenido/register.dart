@@ -587,6 +587,7 @@ class _RegistreState extends State<Registrer> {
                                           _cajaPrenom.text;
                                       objRegistre.dateUtils = _cajaFecha.text;
                                       objRegistre.passeAcces = _cajaClave.text;
+                                      objRegistre.passeAcces = _cajaReClave.text;
                                       if (_selectedInstitution != null) {
                                         objRegistre.codInstitution =
                                             _selectedInstitution!

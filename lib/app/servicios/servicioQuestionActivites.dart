@@ -54,4 +54,22 @@ class QuestionsActivitesService {
       throw Exception('Failed to load questions');
     }
   }
+
+  Future<Map<String, dynamic>> obtenerFichier(String codFichier) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${urls.API_QUESTIONACTIVITES}/cod/$codFichier'),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> body = jsonDecode(response.body);
+        return body;
+      } else {
+        throw Exception('Failed to load fichier: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to load fichier');
+    }
+  }
 }

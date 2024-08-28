@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:ccfs/app/models/responseActividad.dart';
 import 'package:http/http.dart' as http;
 import 'package:ccfs/app/utilities/domains/urls.dart' as urls;
+import 'package:ccfs/app/utilities/globals.dart' as globals;
 
 class ResponseUtilisateurActivitesService {
   Future<List<ReponseUtilisateurActivites>> obtenerResponseActivites() async {
@@ -31,18 +32,24 @@ class ResponseUtilisateurActivitesService {
   }
 
   Future<bool> guardarResponse(
-      ReponseUtilisateurActivites objResponseActivites) async {
+      ReponseUtilisateurActivites objResponse) async {
     var urlSesion = Uri.parse('${urls.API_RESPONSEACTIVITES}/add');
 
-    Map<String, String> cabecera = {
+     Map<String, String> cabecera = {
       HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer ${globals.token}",
     };
-    final respuesta = await http.post(urlSesion,
-        headers: cabecera, body: jsonEncode([objResponseActivites.toJson()]));
 
-    if (respuesta.statusCode == 200) {
+    final respuesta = await http.post(
+      urlSesion,
+      headers: cabecera,
+      body: jsonEncode(objResponse.toJson()),
+    );
+
+    if (respuesta.statusCode == 201) {
       return true;
     } else {
+      print('Error: ${respuesta.statusCode}');
       return false;
     }
   }

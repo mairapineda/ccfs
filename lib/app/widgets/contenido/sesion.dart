@@ -27,14 +27,13 @@ class _SesionState extends State<Sesion> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        height: 1000,
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 0, 80, 74),
         ),
         child: Column(
           children: <Widget>[
             const Padding(
-              padding: EdgeInsets.only(top: 80),
+              padding: EdgeInsets.only(top: 30),
               child: Text(
                 'Parler avec le corps',
                 style: TextStyle(
@@ -45,7 +44,7 @@ class _SesionState extends State<Sesion> {
               ),
             ),
             Positioned(
-              top: 20,
+              top: 5,
               child: Container(
                 width: 340,
                 height: 240,
@@ -71,7 +70,7 @@ class _SesionState extends State<Sesion> {
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
                   Form(
                     key: _frmSesion,
                     child: Column(
@@ -191,7 +190,7 @@ class _SesionState extends State<Sesion> {
                         ),
                         const SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.all(15),
+                          padding: const EdgeInsets.all(5),
                           child: Center(
                             child: ElevatedButton(
                               onPressed: () async {
@@ -293,7 +292,7 @@ class _SesionState extends State<Sesion> {
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 15),
+                          padding: EdgeInsets.only(top: 5),
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: InkWell(

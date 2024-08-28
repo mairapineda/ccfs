@@ -37,4 +37,6 @@ String API_UTILISATEUR = '${API_URL}api/private/utilisateur';
 
 String API_SITIOS = '${API_URL}api/private/site';
 
+String API_EXEMPLE = '${API_URL}api/public/exemple';
+
 String API_IMAGENES = '${API_URL}api/private/image';

@@ -19,7 +19,7 @@ class ReponseRepExa {
 }
 
 class ReponseUtilisateurExamen {
-  String codExamen;
+  dynamic codExamen;
   String codUtils;
   List<ReponseRepExa> reponseRepExa;
 

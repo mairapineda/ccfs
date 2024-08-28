@@ -37,7 +37,7 @@ class _ExamenxCorpsState extends State<ExamenxCorps> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Text('Error vveve: ${snapshot.error}');
             } else if (snapshot.hasData) {
               arrExamen = snapshot.data;
               return Column(
@@ -68,7 +68,7 @@ Widget _generarCard(BuildContext context, Examen objExamen) {
   return Align(
     alignment: Alignment.bottomCenter,
     child: Container(
-      height: MediaQuery.of(context).size.height * 0.95,
+      height: MediaQuery.of(context).size.height * 0.85,
       width: double.infinity,
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 0),
       decoration: BoxDecoration(

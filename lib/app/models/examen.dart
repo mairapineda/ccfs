@@ -2,7 +2,7 @@ class Examen {
   dynamic codExamen;
   String prenomExamen;
   String descExamen;
-  double scoreExamen;
+  int scoreExamen;
   dynamic codCorps;
   dynamic codFichier;
   String base64Fichier;

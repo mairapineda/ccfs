@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 import 'dart:ui';
+import 'package:ccfs/app/widgets/contenido/SequenceCorps.dart';
 import 'package:ccfs/app/widgets/contenido/bienvenida.dart';
 import 'package:ccfs/app/widgets/contenido/corps.dart';
-import 'package:ccfs/app/widgets/contenido/examenCorps.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -24,7 +24,7 @@ class _BottomBarState extends State<SequenceEnseignant> {
       body: PageView(
         controller: _controlPaginas,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [Bienvenida(), CorpsPage(), Corps()],
+        children: const [Bienvenida(), CorpsPage(), CorpsSequence()],
       ),
       extendBody: true,
       bottomNavigationBar: Padding(
@@ -43,26 +43,29 @@ class _BottomBarState extends State<SequenceEnseignant> {
                 child: SalomonBottomBar(
                   items: [
                     SalomonBottomBarItem(
-                      icon: const Icon(Icons.home_rounded),
-                      title: const Text(
-                        "Bureau",
-                        style: TextStyle(fontFamily: 'DidotRegular'),
-                      ),
-                      selectedColor: const Color.fromARGB(255, 206, 230, 214),
-                    ),
+                        icon: const Icon(Icons.home_rounded),
+                        title: const Text(
+                          "Bureau",
+                          style: TextStyle(fontFamily: 'DidotRegular'),
+                        ),
+                        selectedColor: const Color.fromARGB(255, 206, 230, 214),
+                        unselectedColor:
+                            const Color.fromARGB(255, 129, 111, 51)),
                     SalomonBottomBarItem(
-                      icon: const Icon(Icons.emoji_people_rounded),
-                      title: const Text("Le Corps",
-                          style: TextStyle(fontFamily: 'DidotRegular')),
-                      selectedColor: const Color.fromARGB(255, 206, 230, 214),
-                    ),
+                        icon: const Icon(Icons.emoji_people_rounded),
+                        title: const Text("Le Corps",
+                            style: TextStyle(fontFamily: 'DidotRegular')),
+                        selectedColor: const Color.fromARGB(255, 206, 230, 214),
+                        unselectedColor:
+                            const Color.fromARGB(255, 129, 111, 51)),
                     SalomonBottomBarItem(
-                      icon:
-                          const Icon(FontAwesomeIcons.fileArrowDown, size: 20),
-                      title: const Text("Sequence",
-                          style: TextStyle(fontFamily: 'DidotRegular')),
-                      selectedColor: const Color.fromARGB(255, 206, 230, 214),
-                    ),
+                        icon: const Icon(FontAwesomeIcons.fileArrowDown,
+                            size: 20),
+                        title: const Text("Sequence",
+                            style: TextStyle(fontFamily: 'DidotRegular')),
+                        selectedColor: const Color.fromARGB(255, 206, 230, 214),
+                        unselectedColor:
+                            const Color.fromARGB(255, 129, 111, 51)),
                   ],
                   currentIndex: _selectedIndex,
                   onTap: (index) {

@@ -70,6 +70,13 @@ dependencies:
   media_kit: ^1.1.10
   media_kit_video: ^1.2.4
   media_kit_libs_video: ^1.0.4
+  super_drag_and_drop: ^0.7.0
+  dio: ^4.0.4
+  permission_handler: ^8.3.0
+  record: ^5.1.2
+  open_file: ^3.2.1
+  video_player: ^2.6.1
+  
 
   
   
@@ -143,6 +150,22 @@ flutter:
     - images/img/C5.png
     - images/img/C6.png
     - images/img/C7.png
+    - images/img/CO1.png
+    - images/img/CO2.png
+    - images/img/CO3.png
+    - images/img/CO4.png
+    - images/img/CO5.png
+    - images/img/CO6.png
+    - images/img/CO7.png
+    - images/img/COP1.png
+    - images/img/COP2.png
+    - images/img/COP3.png
+    - images/img/COP4.png
+    - images/img/COP5.png
+    - images/img/COP6.png
+    - images/img/COP7.png
+    - images/img/COP8.png
+    - assets/icons/icon.png
  
 
   

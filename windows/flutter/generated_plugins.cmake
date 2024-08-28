@@ -5,9 +5,12 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   file_selector_windows
+  irondash_engine_context
   media_kit_libs_windows_video
   media_kit_video
+  record_windows
   screen_brightness_windows
+  super_native_extensions
   syncfusion_pdfviewer_windows
   url_launcher_windows
 )

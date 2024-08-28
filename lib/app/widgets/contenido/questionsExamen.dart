@@ -8,6 +8,7 @@ import 'package:ccfs/app/models/responseExamen.dart';
 import 'package:ccfs/app/servicios/servicioQuestionExamen.dart';
 import 'package:ccfs/app/servicios/servicioResponseExamen.dart';
 import 'package:ccfs/app/widgets/contenido/responseExamen.dart';
+import 'package:ccfs/app/widgets/utils/slider.dart';
 /* import 'package:ccfs/app/widgets/utils/slider.dart'; */
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -105,6 +106,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
               return Column(
                 children: [
                   _buildHeaderWithProgress(),
+                  const SizedBox(height: 50),
                   _buildPageView(),
                 ],
               );
@@ -120,7 +122,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
   Widget _buildHeaderWithProgress() {
     return Column(
       children: [
-        const SizedBox(height: 25),
+        const SizedBox(height: 40),
         Stack(
           children: [
             SizedBox(
@@ -133,7 +135,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 15),
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
@@ -162,16 +164,14 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              height: 12,
-              child: LinearProgressIndicator(
-                value: (_pageController.hasClients && arrQuestionExamen != null)
-                    ? _pageController.page! / (arrQuestionExamen!.length - 1)
-                    : 0,
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                valueColor: const AlwaysStoppedAnimation<Color>(
-                    Color.fromARGB(255, 159, 159, 159)),
-              ),
+            child: LinearProgressIndicator(
+              value: (_pageController.hasClients && arrQuestionExamen != null)
+                  ? _pageController.page! / (arrQuestionExamen!.length - 1)
+                  : 0,
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                  Color.fromARGB(255, 159, 159, 159)),
+              minHeight: 12, // Añadido para asegurar la altura
             ),
           ),
         ),
@@ -180,7 +180,6 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
   }
 
   Widget _buildPageView() {
-    const SizedBox();
     return Expanded(
       child: PageView.builder(
         controller: _pageController,
@@ -224,7 +223,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           width: double.infinity,
-          height: 600,
+          height: 650,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color.fromARGB(255, 0, 80, 74),
@@ -233,7 +232,6 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 10),
                 Text(
                   objExamen.prenomReponExamen,
                   style: const TextStyle(
@@ -331,8 +329,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
                                           overlayColor: const Color.fromARGB(
                                                   255, 129, 111, 51)
                                               .withAlpha(22),
-                                          /*  trackShape:
-                                              RoundedInactiveTrackShape(), */
+                                          trackShape: RoundedTrackShape(),
                                         ),
                                         child: Slider(
                                           value: _currentSliderValue.clamp(
@@ -393,7 +390,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
                         constraints: const BoxConstraints(
                           maxHeight: 100,
                         ),
-                        child: TextField(
+                        child: TextFormField(
                           onChanged: (value) {
                             setState(() {
                               objExamen.selectedOption = value;
@@ -651,6 +648,7 @@ class _QuestionExamenPageState extends State<QuestionExamenPage> {
                                       MaterialPageRoute(
                                         builder: (context) => ResponseExamen(
                                           userResponses: userResponses,
+                                          codExamen: widget.codExamen.codExamen,
                                         ),
                                       ),
                                     );

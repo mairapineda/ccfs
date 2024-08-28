@@ -6,10 +6,12 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ResponseExamen extends StatefulWidget {
   final List<ReponseRepExa> userResponses;
+  final String codExamen;
 
   const ResponseExamen({
     super.key,
     required this.userResponses,
+    required this.codExamen,
   });
 
   @override
@@ -24,7 +26,7 @@ class _ResponseExamenState extends State<ResponseExamen> {
   @override
   void initState() {
     super.initState();
-    objQuestionExamen = misServicios.obtenerQuestionsExamen();
+    objQuestionExamen = misServicios.obtenerQuestionxExamen(widget.codExamen);
   }
 
   void calculateScore(List<QuestionExamen> questions) {
@@ -54,12 +56,23 @@ class _ResponseExamenState extends State<ResponseExamen> {
             calculateScore(questions);
             double scorePercentage = (correctAnswers / questions.length) * 100;
             int incorrectAnswers = questions.length - correctAnswers;
-
+            const SizedBox(height: 40);
             return Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.close,
+                          color: Color.fromARGB(255, 0, 80, 74)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/examen');
+                      },
+                    ),
+                  ],
+                ),
                 Container(
                   color: const Color.fromARGB(255, 255, 255, 255),
-                  padding: const EdgeInsets.all(30),
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -76,76 +89,29 @@ class _ResponseExamenState extends State<ResponseExamen> {
                         TweenAnimationBuilder<double>(
                           tween: Tween<double>(
                               begin: 0, end: scorePercentage / 100),
-                          duration: const Duration(seconds: 3),
+                          duration: const Duration(seconds: 2),
                           builder: (context, value, child) {
-                            return Column(
-                              children: [
-                                CircularPercentIndicator(
-                                  radius: 80,
-                                  lineWidth: 16.0,
-                                  animation: true,
-                                  percent: value,
-                                  center: Text(
-                                    '${(value * 100).toStringAsFixed(1)}%',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium!
-                                        .copyWith(
-                                          color: const Color.fromARGB(
-                                              255, 0, 80, 74),
-                                        ),
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      elevation: 5,
-                                      color: const Color.fromARGB(
-                                          255, 230, 255, 250),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Text(
-                                          'Correctas: $correctAnswers',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            color:
-                                                Color.fromARGB(255, 0, 80, 74),
-                                            fontFamily: 'DidotRegular',
-                                          ),
-                                        ),
-                                      ),
+                            return CircularPercentIndicator(
+                              radius: 80,
+                              lineWidth: 16.0,
+                              animation: true,
+                              percent: value,
+                              center: Text(
+                                '${(value * 100).toStringAsFixed(1)}%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                      color:
+                                          const Color.fromARGB(255, 0, 80, 74),
+                                      fontFamily: 'DidotBold',
                                     ),
-                                    const SizedBox(width: 8),
-                                    Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      elevation: 5,
-                                      color: const Color.fromARGB(
-                                          255, 255, 230, 230),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Text(
-                                          'Incorrectas: $incorrectAnswers',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            color:
-                                                Color.fromARGB(255, 255, 0, 0),
-                                            fontFamily: 'DidotBold',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor:
+                                  const Color.fromARGB(255, 210, 209, 209),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 0, 80, 74),
                             );
                           },
                         ),
@@ -153,9 +119,56 @@ class _ResponseExamenState extends State<ResponseExamen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 5,
+                      color: const Color.fromARGB(255, 230, 255, 250),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          'Correctas: $correctAnswers',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 0, 80, 74),
+                            fontFamily: 'DidotRegular',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      elevation: 5,
+                      color: const Color.fromARGB(255, 255, 230, 230),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          'Incorrectas: $incorrectAnswers',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 211, 141, 141),
+                            fontFamily: 'DidotBold',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 Expanded(
                   child: Container(
-                    color: const Color.fromARGB(255, 0, 80, 74),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 0, 80, 74),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -180,18 +193,20 @@ class _ResponseExamenState extends State<ResponseExamen> {
                                     question.reponseExamen;
                                 return Card(
                                   color: isCorrect
-                                      ? Colors.green.shade100
-                                      : Colors.red.shade100,
-                                  elevation: 4,
+                                      ? const Color.fromARGB(255, 253, 253, 253)
+                                      : const Color.fromARGB(
+                                          255, 255, 230, 230),
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
                                   child: ListTile(
                                     title: Text(
                                       'Question ${index + 1}',
                                       style: const TextStyle(
                                         fontSize: 16,
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255),
+                                        color: Color.fromARGB(255, 0, 80, 74),
                                         fontFamily: 'DidotBold',
                                       ),
                                     ),
@@ -199,7 +214,7 @@ class _ResponseExamenState extends State<ResponseExamen> {
                                       'Réponse: ${response.reponseUtilsExamen}',
                                       style: const TextStyle(
                                         fontSize: 14,
-                                        color: Color.fromARGB(255, 255, 255, 255),
+                                        color: Color.fromARGB(255, 0, 80, 74),
                                         fontFamily: 'DidotRegular',
                                       ),
                                     ),

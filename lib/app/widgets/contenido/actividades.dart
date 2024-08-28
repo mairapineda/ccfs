@@ -71,7 +71,7 @@ Widget _generarCard(BuildContext context, Activites objActivites) {
   return Align(
     alignment: Alignment.bottomCenter,
     child: Container(
-      height: MediaQuery.of(context).size.height * 0.95,
+      height: MediaQuery.of(context).size.height * 0.85,
       width: double.infinity,
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 0),
       decoration: BoxDecoration(

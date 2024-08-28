@@ -16,16 +16,16 @@ class CorpsPage extends StatefulWidget {
 
 class _CorpsPageState extends State<CorpsPage> {
   final CorpsService misServicios = CorpsService();
-  late Future<List<PartieduCorps>> objPartieduCorps = Future(() => []);
+  late Future<List<PartieduCorps>> objPartieduCorps;
   List<PartieduCorps>? arrPartieduCorps = [];
   final List<String> _imagePaths = [
-    'images/img/C1.png',
-    'images/img/C2.png',
-    'images/img/C3.png',
-    'images/img/C4.png',
-    'images/img/C5.png',
-    'images/img/C6.png',
-    'images/img/C7.png',
+    'images/img/COP1.png',
+    'images/img/COP2.png',
+    'images/img/COP3.png',
+    'images/img/COP4.png',
+    'images/img/COP5.png',
+    'images/img/COP6.png',
+    'images/img/COP7.png',
   ];
 
   @override
@@ -92,29 +92,30 @@ class _CorpsPageState extends State<CorpsPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               arrPartieduCorps = snapshot.data;
-              return Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 700),
-                  child: GridView.builder(
+              return CustomScrollView(
+                slivers: [
+                  SliverGrid(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
-                      childAspectRatio: 1,
+                      crossAxisSpacing: 3,
+                      mainAxisSpacing: 3,
+                      childAspectRatio: 0.65,
                     ),
-                    itemCount: arrPartieduCorps!.length,
-                    itemBuilder: (context, index) {
-                      PartieduCorps objPartieduCorps =
-                          arrPartieduCorps!.elementAt(index);
-                      return Align(
-                        alignment: Alignment.center,
-                        child: _generarTarjeta(
-                            context, objPartieduCorps, index, _imagePaths),
-                      );
-                    },
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        PartieduCorps objPartieduCorps =
+                            arrPartieduCorps!.elementAt(index);
+                        return Align(
+                          alignment: Alignment.center,
+                          child: _generarTarjeta(
+                              context, objPartieduCorps, index, _imagePaths),
+                        );
+                      },
+                      childCount: arrPartieduCorps!.length,
+                    ),
                   ),
-                ),
+                ],
               );
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
@@ -128,67 +129,68 @@ class _CorpsPageState extends State<CorpsPage> {
       ),
     );
   }
-}
 
-Widget _generarTarjeta(BuildContext context, PartieduCorps corps, int index,
-    List<String> imagePaths) {
-  var imagenCorps = const Base64Decoder().convert(corps.base64Corps);
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ExpresionxCorps(codCorps: corps)),
-      );
-    },
-    child: Container(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: 100,
-                height: 120,
-                margin: const EdgeInsets.only(top: 10.0),
-                padding: const EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: AssetImage(imagePaths[index % imagePaths.length]),
+  Widget _generarTarjeta(BuildContext context, PartieduCorps corps, int index,
+      List<String> imagePaths) {
+    var imagenCorps = const Base64Decoder().convert(corps.base64Corps);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ExpresionxCorps(codCorps: corps)),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: 100,
+                  height: 130,
+                  margin: const EdgeInsets.only(top: 10.0),
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: AssetImage(imagePaths[index % imagePaths.length]),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: 100,
-                height: 80,
-                margin: const EdgeInsets.only(top: 10.0),
-                padding: const EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: MemoryImage(imagenCorps),
+                Container(
+                  width: 90,
+                  height: 90,
+                  margin: const EdgeInsets.only(top: 10.0),
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      fit: BoxFit.contain,
+                      image: MemoryImage(imagenCorps),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Text(
-                  corps.prenomCorps,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'DidotBold',
+                Padding(
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Text(
+                    corps.prenomCorps,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'DidotBold',
+                      color: Color.fromARGB(255, 129, 111, 51),
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

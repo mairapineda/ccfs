@@ -34,16 +34,21 @@ class ResponseUtilisateurExamenService {
   Future<bool> guardarResponse(ReponseUtilisateurExamen objResponse) async {
     var urlSesion = Uri.parse('${urls.API_RESPONSEEXAMEN}/add');
 
-    var respuesta = http.MultipartRequest('post', urlSesion);
-    respuesta.fields['codExamen'] = '66c4d60ccad1049f150d818f';
-    respuesta.fields['codUtils'] = objResponse.codUtils;
-    respuesta.fields['reponseRepExa'] = jsonEncode(objResponse.reponseRepExa);
-    respuesta.headers['Authorization']= 'Bearer ${globals.token}';
-    var request = await respuesta.send();
+    Map<String, String> cabecera = {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer ${globals.token}",
+    };
 
-    if (request.statusCode == 200) {
+    final respuesta = await http.post(
+      urlSesion,
+      headers: cabecera,
+      body: jsonEncode(objResponse.toJson()),
+    );
+
+    if (respuesta.statusCode == 201) {
       return true;
     } else {
+      print('Error: ${respuesta.statusCode}');
       return false;
     }
   }

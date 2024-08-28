@@ -17,6 +17,11 @@ class _BienvenidaState extends State<Bienvenida> {
     'https://i.ibb.co/zG7ygxL/Im1.png',
     'https://i.ibb.co/qRLRbWB/Im4.png'
   ];
+  List<String> nombres = [
+    'Des outils transformés',
+    'Rapprocher les cultures',
+    'Bibliothèque linguistique',
+  ];
   @override
   Widget build(BuildContext context) {
     final Uint8List bytes =
@@ -100,7 +105,7 @@ class _BienvenidaState extends State<Bienvenida> {
               padding: EdgeInsets.only(
                   top: 12, right: 15.0, bottom: 20.0, left: 15.0),
               child: Text(
-                '¿Qué es Flutter? Flutter permite a los desarrolladores crear aplicaciones hermosas compiladas de manera nativa a partir de una única base de código tanto para Android como para iOS. Flutter es actualmente uno de los frameworks más populares para el desarrollo de aplicaciones móviles multiplataforma. Además de ser una plataforma de primer nivel para Material Design, los desarrolladores lo consideran una gran alternativa a los frameworks multiplataforma populares como React Native, Ionic, etc. Los widgets de Flutter sustraen todas las diferencias críticas de la plataforma, como el desplazamiento, la navegación, los íconos y las fuentes para ofrecer un desempeño nativo completo tanto en iOS como en Android. En CodeCanyon, encontrarás todas las herramientas que necesitas para empezar a crear tu aplicación con Flutter. Con las plantillas de Flutter, toda la codificación se ha hecho con anticipación, tú solo tienes que concentrarte en hacer que tu aplicación sea única.',
+                "Ce travail de recherche est ancré dans l’actualité scientifique et offre une ouverture des perspectives alliant la linguistique, la didactique et l’ingénierie des langues. Cette convergence permettra de mettre à profit les compétences numériques, linguistiques et didactiques. Ce travail se veut un facilitateur du processus d'apprentissage, aidant les apprenants à interpréter la langue à l’oral et à prendre conscience de la meilleure façon d’exploiter, d’analyser et de corriger leurs erreurs à partir de leurs propres productions orales. Ce travail adopte une attitude descriptive vis-à-vis de la langue, plutôt que normative, puisque le corpus oral fournit des échantillons de langue dans des contextes authentiques et permet de distinguer la distance entre la norme et l'usage. Ce qui fait encore défaut même aux apprenants les plus avancés, de niveau C1/C2 lors de l’utilisation des expressions figées.",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontFamily: 'DidotRegular',
@@ -111,6 +116,7 @@ class _BienvenidaState extends State<Bienvenida> {
           ),
           SliverToBoxAdapter(
             child: Container(
+              height:300,
               decoration: BoxDecoration(
                 image: const DecorationImage(
                   image: NetworkImage(
@@ -132,57 +138,58 @@ class _BienvenidaState extends State<Bienvenida> {
                   viewportFraction: 0.7,
                   onPageChanged: (index, reason) {},
                 ),
-                items: imgList
-                    .map((item) => Container(
-                          margin: const EdgeInsets.all(15),
-                          child: ClipRRect(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10.0)),
-                            child: Stack(
-                              children: <Widget>[
-                                Image.network(item,
-                                    fit: BoxFit.cover, width: 1000),
-                                Positioned(
-                                  bottom: 0.0,
-                                  left: 0.0,
-                                  right: 0.0,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Color.fromARGB(255, 206, 230, 214),
-                                          Color.fromARGB(0, 206, 230, 214)
-                                        ],
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 20.0),
-                                    child: const Text(
-                                      'Parler avec le corps',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 80, 74),
-                                        fontSize: 20,
-                                        fontFamily: 'DidotBold',
-                                      ),
-                                    ),
-                                  ),
+                items: imgList.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  String item = entry.value;
+                  return Container(
+                    margin: const EdgeInsets.all(15),
+                    child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                      child: Stack(
+                        children: <Widget>[
+                          Image.network(item, fit: BoxFit.cover, width: 1000),
+                          Positioned(
+                            bottom: 0.0,
+                            left: 0.0,
+                            right: 0.0,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(255, 206, 230, 214),
+                                    Color.fromARGB(0, 206, 230, 214)
+                                  ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
                                 ),
-                              ],
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10.0, horizontal: 20.0),
+                              child: Text(
+                                nombres[index],
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 0, 80, 74),
+                                  fontSize: 20,
+                                  fontFamily: 'DidotBold',
+                                ),
+                              ),
                             ),
                           ),
-                        ))
-                    .toList(),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ),
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
-                  top: 12, right: 15.0, bottom: 20.0, left: 15.0),
+                  top: 12, right: 15.0, bottom: 80.0, left: 15.0),
               child: Text(
-                '¿Qué es Flutter? Flutter permite a los desarrolladores crear aplicaciones hermosas compiladas de manera nativa a partir de una única base de código tanto para Android como para iOS. Flutter es actualmente uno de los frameworks más populares para el desarrollo de aplicaciones móviles multiplataforma. Además de ser una plataforma de primer nivel para Material Design, los desarrolladores lo consideran una gran alternativa a los frameworks multiplataforma populares como React Native, Ionic, etc. Los widgets de Flutter sustraen todas las diferencias críticas de la plataforma, como el desplazamiento, la navegación, los íconos y las fuentes para ofrecer un desempeño nativo completo tanto en iOS como en Android. En CodeCanyon, encontrarás todas las herramientas que necesitas para empezar a crear tu aplicación con Flutter. Con las plantillas de Flutter, toda la codificación se ha hecho con anticipación, tú solo tienes que concentrarte en hacer que tu aplicación sea única.',
+                "La linguistique de corpus oraux appliquée à l'enseignement des langues étrangères est une ligne de recherche relativement récente dont l'application dans la classe ne reçoit toujours pas l'attention qu'elle mérite, en partie pour des raisons pratiques, mais aussi pour le changement d'attitude que cette approche implique, tant chez l'enseignant que chez l'apprenant.  D'un côté, les programmes de consultation des corpus requièrent une expertise approfondie en linguistique outillée et numérique. Par ailleurs, les enseignants restent sceptiques, en grande partie en raison du manque de formation technique et didactique sur les usages possibles de ces outils et sur leur efficacité dans le processus d'enseignement.",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontFamily: 'DidotRegular',

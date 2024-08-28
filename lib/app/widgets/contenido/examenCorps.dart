@@ -57,22 +57,32 @@ class _ExpresionxCorpsState extends State<Corps> {
       body: Container(
         padding: const EdgeInsets.all(10),
         child: FutureBuilder<List<PartieduCorps>>(
-            future: objPartieduCorps,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                arrPartieduCorps = snapshot.data!;
-                return ListView(
-                  children: List.generate(arrPartieduCorps.length, (index) {
-                    PartieduCorps objPartieduCorps =
-                        arrPartieduCorps.elementAt(index);
-                    return _generarCard(context, objPartieduCorps, index);
-                  }),
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              return const CircularProgressIndicator();
-            }),
+          future: objPartieduCorps,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              arrPartieduCorps = snapshot.data!;
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: List.generate(arrPartieduCorps.length, (index) {
+                        PartieduCorps objPartieduCorps =
+                            arrPartieduCorps[index];
+                        return _generarCard(context, objPartieduCorps, index);
+                      }),
+                    ),
+                  ),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }

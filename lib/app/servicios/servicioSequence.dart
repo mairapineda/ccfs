@@ -28,7 +28,7 @@ class SequenceService {
   }
    Future<List<Sequence>> obtenerSequenceCorps(String codCorps) async {
     final response = await http.get(
-      Uri.parse('${urls.API_FIGGES}/corps/$codCorps'),
+      Uri.parse('${urls.API_SEQUENCE}/corps/$codCorps'),
     );
 
     if (response.statusCode == 200) {

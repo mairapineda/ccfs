@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:ccfs/app/servicios/servicioFigges.dart';
 import 'package:ccfs/app/widgets/contenido/actividades.dart';
-/* import 'package:ccfs/app/widgets/contenido/activites.dart';
-import 'package:ccfs/app/widgets/utils/slider.dart'; */
+import 'package:ccfs/app/widgets/utils/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:ccfs/app/models/expressionFigges.dart';
 import 'package:just_audio/just_audio.dart';
@@ -12,7 +11,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class ExpressionsList2 extends StatefulWidget {
   final Expression codFigees;
 
-  const ExpressionsList2({super.key, required this.codFigees,});
+  const ExpressionsList2({
+    super.key,
+    required this.codFigees,
+  });
 
   @override
   _ExpressionsList2State createState() => _ExpressionsList2State();
@@ -129,7 +131,7 @@ class _ExpressionsList2State extends State<ExpressionsList2> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
                       Row(
@@ -156,7 +158,7 @@ class _ExpressionsList2State extends State<ExpressionsList2> {
                                 overlayColor:
                                     const Color.fromARGB(255, 255, 255, 255)
                                         .withAlpha(22),
-                              /*   trackShape: RoundedInactiveTrackShape(), */
+                                trackShape: RoundedTrackShape(),
                               ),
                               child: Slider(
                                 value: _position.inSeconds.toDouble(),
@@ -168,6 +170,7 @@ class _ExpressionsList2State extends State<ExpressionsList2> {
                               ),
                             ),
                           ),
+                          const SizedBox(width: 7),
                           Text(
                             _formatDuration(_duration - _position),
                             style: const TextStyle(

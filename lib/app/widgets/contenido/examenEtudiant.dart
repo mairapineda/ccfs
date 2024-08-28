@@ -42,25 +42,28 @@ class _BottomBarState extends State<ExamenEtudiant> {
                 child: SalomonBottomBar(
                   items: [
                     SalomonBottomBarItem(
-                      icon: const Icon(Icons.home_rounded),
-                      title: const Text(
-                        "Bureau",
-                        style: TextStyle(fontFamily: 'DidotRegular'),
-                      ),
-                      selectedColor: const Color.fromARGB(255, 206, 230, 214),
-                    ),
+                        icon: const Icon(Icons.home_rounded),
+                        title: const Text(
+                          "Bureau",
+                          style: TextStyle(fontFamily: 'DidotRegular'),
+                        ),
+                        selectedColor: const Color.fromARGB(255, 255, 255, 255),
+                        unselectedColor:
+                            const Color.fromARGB(255, 129, 111, 51)),
                     SalomonBottomBarItem(
-                      icon: const Icon(Icons.emoji_people_rounded),
-                      title: const Text("Le Corps",
-                          style: TextStyle(fontFamily: 'DidotRegular')),
-                      selectedColor: const Color.fromARGB(255, 206, 230, 214),
-                    ),
+                        icon: const Icon(Icons.emoji_people_rounded),
+                        title: const Text("Le Corps",
+                            style: TextStyle(fontFamily: 'DidotRegular')),
+                        selectedColor: const Color.fromRGBO(255, 255, 255, 1),
+                        unselectedColor:
+                            const Color.fromARGB(255, 129, 111, 51)),
                     SalomonBottomBarItem(
-                      icon: const Icon(Icons.import_contacts_rounded),
-                      title: const Text("Examen",
-                          style: TextStyle(fontFamily: 'DidotRegular')),
-                      selectedColor: const Color.fromARGB(255, 206, 230, 214),
-                    ),
+                        icon: const Icon(Icons.import_contacts_rounded),
+                        title: const Text("Examen",
+                            style: TextStyle(fontFamily: 'DidotRegular')),
+                        selectedColor: const Color.fromARGB(255, 255, 255, 255),
+                        unselectedColor:
+                            const Color.fromARGB(255, 129, 111, 51)),
                   ],
                   currentIndex: _selectedIndex,
                   onTap: (index) {
