@@ -120,9 +120,11 @@ class _CorpsPageState extends State<CorpsPage> {
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
-            return const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
-              strokeWidth: 4.0,
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
+                strokeWidth: 4.0,
+              ),
             );
           },
         ),

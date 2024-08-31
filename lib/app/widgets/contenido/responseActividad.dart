@@ -30,13 +30,30 @@ class _ResponseActivitesState extends State<ResponseActivites> {
 
   void calculateScore(List<QuestionActivites> questions) {
     correctAnswers = 0;
-    for (int i = 0; i < widget.userResponses.length; i++) {
-      if (widget.userResponses[i].reponseUtilsActi ==
-          questions[i].reponseActivites) {
+
+    for (int i = 0; i < questions.length; i++) {
+
+      List<String> userResponseList = widget.userResponses[i].reponseUtilsActi.split(',');
+      String rawResponse = widget.userResponses[i].reponseUtilsActi;
+      if (!rawResponse.startsWith('[') || !rawResponse.endsWith(']')) {
+        rawResponse = '[$rawResponse]';
+      }
+      List<String> correctAnswersList = questions[i].reponseActivites;
+      print("Usuario: ${userResponseList.toString()}");
+      print("Sin corchetes: ${rawResponse}");
+      print("Correctas: ${correctAnswersList.toString()}");
+      if (rawResponse == correctAnswersList.toString()) {
+        print("Correcta: $rawResponse");
         correctAnswers++;
       }
+
+
     }
+
+    print("$correctAnswers");
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +74,7 @@ class _ResponseActivitesState extends State<ResponseActivites> {
             const SizedBox(height: 60);
             return Column(
               children: [
+                const SizedBox(height: 50,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -157,8 +175,15 @@ class _ResponseActivitesState extends State<ResponseActivites> {
                               itemBuilder: (context, index) {
                                 final response = widget.userResponses[index];
                                 final question = questions[index];
-                                bool isCorrect = response.reponseUtilsActi ==
-                                    question.reponseActivites;
+                                List<String> userResponseList = response.reponseUtilsActi.split(',');
+                                List<String> correctAnswersList = question.reponseActivites;
+                                String rawResponse = response.reponseUtilsActi;
+                                if (!rawResponse.startsWith('[') || !rawResponse.endsWith(']')) {
+                                  rawResponse = '[$rawResponse]';
+                                }
+
+                                bool isCorrect = rawResponse == correctAnswersList.toString()
+                                    ;
                                 return Card(
                                   color: isCorrect
                                       ? const Color.fromARGB(255, 253, 253, 253)

@@ -144,7 +144,9 @@ Widget _generarCard(BuildContext context, Expression objfigees) {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: MemoryImage(imagenFigees),
-                  ))),
+                  )
+              )
+          ),
         ],
       ),
     ),

@@ -42,7 +42,7 @@ dependencies:
   salomon_bottom_bar: ^3.3.1 
   audioplayers: ^6.0.0
   audioplayers_web: ^5.0.0
-  path_provider: ^2.0.11
+  win32: ^5.5.4
   http:
   mdi:
   wave: ^0.2.0
@@ -57,7 +57,7 @@ dependencies:
   json_annotation:
   build_runner:
   flutter_screenutil: ^5.9.3
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   flutter_sound: ^9.2.13
   flutter_sound_platform_interface: ^9.2.13
   audio_session: ^0.1.6

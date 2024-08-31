@@ -35,7 +35,9 @@ class _ExamenxCorpsState extends State<ExamenxCorps> {
           future: objExamen,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Center(
+                child:  CircularProgressIndicator(),
+              );
             } else if (snapshot.hasError) {
               return Text('Error vveve: ${snapshot.error}');
             } else if (snapshot.hasData) {

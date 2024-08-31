@@ -31,14 +31,15 @@ class ResponseUtilisateurActivitesService {
         .toList();
   }
 
-  Future<bool> guardarResponse(
-      ReponseUtilisateurActivites objResponse) async {
+  Future<bool> guardarResponse(ReponseUtilisateurActivites objResponse) async {
+    print("${globals.token}");
     var urlSesion = Uri.parse('${urls.API_RESPONSEACTIVITES}/add');
 
      Map<String, String> cabecera = {
       HttpHeaders.contentTypeHeader: "application/json",
       HttpHeaders.authorizationHeader: "Bearer ${globals.token}",
     };
+
 
     final respuesta = await http.post(
       urlSesion,

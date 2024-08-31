@@ -32,6 +32,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
   late AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   int _currentPage = 0;
+  bool _allAssociated = false;
   List<ReponseActividad> userResponses = [];
   bool isAnswerValid = false;
   bool isAnswerCorrect = false;
@@ -41,7 +42,11 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
   List<String> textosSubrayados = [];
   List<Color> coloresSubrayados = [];
   Map<String, dynamic>? fichierData;
+  Set<String> elementosRelacionados = {};
+  Map<String, String> relacion = {};
 
+  List<List<String>> relaciones = [];
+  int relacionShipIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -81,11 +86,10 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
 
   void saveUserResponse(QuestionActivites objActivites) {
     setState(() {
-      print(
-          'Guardando respuesta: codQuestion=${objActivites.codQuestion}, selectedOption=${objActivites.selectedOption}');
+      print('Guardando respuesta: codQuestion=${objActivites.codQuestion}, selectedOption=${objActivites.selectedOption}');
       userResponses.add(ReponseActividad(
         codQuestion: objActivites.codQuestion,
-        reponseUtilsActi: objActivites.selectedOption!,
+        reponseUtilsActi: objActivites.selectedOption ?? "",
       ));
     });
   }
@@ -204,9 +208,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
   }
 
   Widget _buildPageView() {
-    const SizedBox(
-      height: 15,
-    );
+    const SizedBox(height: 20 ,);
     return Expanded(
       child: PageView.builder(
         controller: _pageController,
@@ -227,8 +229,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
               tipoArchivo = null;
             }
           }
-          return _generarCard(
-              context, objActivites, index, archivo, tipoArchivo);
+          return _generarCard(context, objActivites, index, archivo, tipoArchivo);
         },
       ),
     );
@@ -247,34 +248,180 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
       ReponseActividad userResponse, QuestionActivites question) {
     return userResponse.reponseUtilsActi == question.reponseActivites;
   } */
-  void validateSingleAnswer(
-      int questionIndex, List<QuestionActivites> questions) {
-    if (userResponses[questionIndex].reponseUtilsActi ==
-        questions[questionIndex].reponseActivites) {
+  void validateSingleAnswer(int questionIndex, List<QuestionActivites> questions) {
+    List<String> userResponseList = userResponses[questionIndex].reponseUtilsActi.split(',');
+    print("Probando resultado individual");
+    String rawResponse = userResponses[questionIndex].reponseUtilsActi;
+    print(rawResponse);
+    print(questions[questionIndex].reponseActivites);
+    if (rawResponse == questions[questionIndex].reponseActivites.toString()) {
+      correctAnswers++;
+    }else if(userResponseList.toString() == questions[questionIndex].reponseActivites.toString()){
       correctAnswers++;
     }
   }
 
-  Widget _generarCard(BuildContext context, QuestionActivites objActivites,
-      int index, Uint8List? archivo, String? tipoArchivo) {
-    const SizedBox(height: 20);
-    return Expanded(
+
+  Widget _buildDragTargetText(QuestionActivites objActivites) {
+    List<String> parts = objActivites.questionsActivites.split('___');
+    List<String?> acceptedOptions = List<String?>.filled(parts.length, null);
+
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return Wrap(
+          children: parts.asMap().entries.map((entry) {
+            int index = entry.key;
+            String part = entry.value;
+
+            return part == ''
+                ? DragTarget<String>(
+              onAccept: (String option) {
+                setState(() {
+                  acceptedOptions[index] = option;
+                  objActivites.selectedOption = acceptedOptions
+                      .where((element) => element != null)
+                      .join(',');
+                  objActivites.hasMovedOption = true;
+                });
+                print(acceptedOptions);
+                print(objActivites.selectedOption);
+              },
+              builder: (context, candidateData, rejectedData) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    acceptedOptions[index] ?? '___________',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontFamily: 'DidotRegular',
+                    ),
+                  ),
+                );
+              },
+            )
+                : Text(
+              part,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontFamily: 'DidotRegular',
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+
+  bool _isAnswerValid(QuestionActivites objActivites) {
+    print(objActivites.tipo);
+    switch (objActivites.tipo) {
+      case 'écrire':
+      case 'écrire-image':
+      case 'écrire-audio':
+      case 'soulignez':
+        return objActivites.selectedOption != null &&
+            objActivites.selectedOption!.isNotEmpty;
+      case 'Selmultiple':
+      case 'vr/fa':
+      case 'vr/fa-audio':
+      case 'Selmultiple-audio':
+        return objActivites.selectedOption != null;
+      case 'ordre':
+      case 'deplacer':
+        return objActivites.optionsActivites.isNotEmpty &&
+            objActivites.hasMovedOption;
+      case 'associé':
+        return objActivites.selectedOption != null && _allAssociated;
+      default:
+        return false;
+    }
+  }
+
+
+  Uint8List base64ToUint8List(String base64String) {
+    final base64Data = base64String.split(',').last;
+    return base64Decode(base64Data);
+  }
+
+  Widget _generarCard(BuildContext context, QuestionActivites objActivites, int index, Uint8List? archivo, String? tipoArchivo) {
+
+
+    List? imageAssociationReponse = objActivites.imageAssociationReponse;
+    List<String>? base64Strings = imageAssociationReponse?.cast<String>();
+
+
+    const String defaultBase64Image = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==';
+
+
+    final Uint8List defaultImage = base64ToUint8List(defaultBase64Image);
+    List<Uint8List>? images = base64Strings?.map((base64String) {
+      return base64Decode(base64String);
+    }).toList();
+    List<String> data = objActivites.optionsActivites.toList();
+    List<String> dataRelationship = objActivites.reponseActivites.toList();
+
+    bool todasRelacionadas = relaciones.length == data.length;
+    List<String> userResponse =[];
+    if (todasRelacionadas) {
+      int aciertos = 0;
+
+      for (int i = 0; i < relaciones.length; i++) {
+        String dataSeleccionada = relaciones[i][0];
+        String relacionSeleccionada = relaciones[i][1];
+
+        print("Dato original: ${dataSeleccionada}");
+        print("Dato relacionado: ${relacionSeleccionada}");
+
+
+        userResponse.add(relacionSeleccionada);
+
+
+        objActivites.selectedOption = userResponse.toString();
+        _allAssociated = true;
+
+        int index = data.indexOf(dataSeleccionada);
+
+        print(objActivites.selectedOption);
+
+        if (index != -1 && dataRelationship[index] == relacionSeleccionada) {
+          aciertos++;
+        }
+      }
+
+      print(userResponse.toString());
+      double porcentaje = (data.length > 0) ? (aciertos / data.length) * 100 : 0;
+
+      print('Aciertos: $aciertos de ${data.length} (${porcentaje.toStringAsFixed(2)}%)');
+
+      // getResult(points, "Aciertos: $aciertos de ${data.length} (${porcentaje.toStringAsFixed(2)}%)", porcentaje, 1, context, "null");
+    }
+
+
+    const SizedBox(height: 0);
+    return Flexible(
       child: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 15,
           ),
           width: double.infinity,
-          height: 700,
+          height: 1100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: const Color.fromARGB(255, 255, 255, 255),
           ),
           child: IntrinsicHeight(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: 70),
                 Text(
                   objActivites.prenomReponActivites,
                   style: const TextStyle(
@@ -403,8 +550,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                   textoSeleccionado =
                                       selection.textInside(option);
 
-                                  print(
-                                      "Texto seleccionado: $textoSeleccionado");
+                                  print("Texto seleccionado: $textoSeleccionado");
                                 });
                               },
                             ),
@@ -418,8 +564,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                     textoSeleccionado = "";
                                     objActivites.selectedOption =
                                         textosSubrayados.join(", ");
-                                    print(
-                                        "Textos subrayados: $textosSubrayados");
+                                    print("Textos subrayados: $textosSubrayados");
                                   }
                                 });
                               },
@@ -507,16 +652,17 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                               ),
                               child: DragTarget<String>(
                                 onWillAcceptWithDetails: (data) {
-                                  print('Will accept: $data');
-                                  return data == data;
+                                  print('Will accept: ${data.data}');
+                                  return data.data == data.data;
                                 },
                                 onAcceptWithDetails: (data) {
                                   setState(() {
+
                                     objActivites.hasMovedOption = true;
                                     objActivites.selectedOption =
                                         objActivites.optionsActivites.join(',');
                                   });
-                                  print('Accepted: $data');
+                                  print('Accepted: ${data.data}');
                                 },
                                 builder:
                                     (context, candidateData, rejectedData) {
@@ -647,14 +793,108 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                       }).toList(),
                     ),
                   ),
+                ]  else if (objActivites.tipo == 'associé') ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          constraints: BoxConstraints(maxWidth: 300),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final item = data[index];
+                              if(!elementosRelacionados.contains(item)){
+                                return Draggable(
+                                  feedback: Material(
+                                    elevation: 4.0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Text(item),
+                                    ),
+                                  ),
+                                  data: item,
+                                  child: ListTile(
+                                    title: Text(item),
+                                  ),
+                                );
+                              }else{
+
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 300),
+                          child: DragTarget(
+                            onAcceptWithDetails: (data) {
+
+                            },
+                            builder: (context, candidateData, rejectedData) {
+                              return ListView.builder(
+
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: dataRelationship.length,
+
+                                itemBuilder: (context, index) {
+                                  final item = dataRelationship[index];
+                                  Uint8List imageToShow = images != null && images!.isNotEmpty
+                                      ? images![index]
+                                      : defaultImage;
+                                  return DragTarget<String>(
+                                    onWillAcceptWithDetails: (data) => true,
+                                    onAcceptWithDetails: (data) {
+                                      setState(() {
+                                        print("Aceptando un dato: ${data.data}");
+                                        elementosRelacionados.add(data.data);
+                                        relaciones.add([data.data, item]);
+                                        print(relaciones.toString());
+                                      });
+                                    },
+                                    builder: (context, candidateData, rejectedData) {
+                                      return ListTile(
+                                        title: Column(
+                                          children: [
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              margin: const EdgeInsets.only(top: 10.0),
+                                              padding: const EdgeInsets.all(5.0),
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(8.0),
+                                                image: DecorationImage(
+                                                  fit: BoxFit.contain,
+                                                  image: MemoryImage(imageToShow),
+                                                ),
+                                              ),
+                                            ),
+                                            //Text(item),
+
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: Row(
+                Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(
-                        width: 70,
                         child: _currentPage < arrQuestionActivites!.length - 1
                             ? OutlinedButton(
                                 style: OutlinedButton.styleFrom(
@@ -664,12 +904,13 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                     color: Color.fromARGB(255, 0, 80, 74),
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   minimumSize: const Size(30, 20),
                                 ),
                                 onPressed: () {
-                                  if (_showFeedback) {
+                                  print("Boton de check");
+                                  if(_showFeedback){
                                     if (_pageController.page!.toInt() <
                                         arrQuestionActivites!.length - 1) {
                                       setState(() {
@@ -681,9 +922,9 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                         curve: Curves.easeIn,
                                       );
                                     }
-                                  } else {
+                                  }else{
                                     _pauseAudio();
-                                    if (_isAnswerValid(objActivites)) {
+                                    if (_isAnswerValid(objActivites) != false) {
                                       saveUserResponse(objActivites);
                                       validateSingleAnswer(
                                           _currentPage, arrQuestionActivites!);
@@ -691,7 +932,8 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                         _showFeedback = true;
                                       });
                                     } else {
-                                      ScaffoldMessenger.of(context)
+                                      print("Error false");
+                                      /*ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
                                           content: SingleChildScrollView(
@@ -727,7 +969,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                           margin: const EdgeInsets.all(10),
                                           padding: EdgeInsets.zero,
                                         ),
-                                      );
+                                      );*/
                                     }
                                   }
                                 },
@@ -743,7 +985,78 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                         color: Color.fromARGB(255, 0, 80, 74),
                                       ),
                               )
-                            : OutlinedButton(
+                            : GestureDetector(
+                          onTap: () async {
+                            saveUserResponse(objActivites);
+                            try {
+                              final decodedToken = jsonDecode(utf8.decode(
+                                  base64Url.decode(base64Url.normalize(
+                                      globals.token.split(".")[1]))));
+                              final codUtils = decodedToken['id'];
+                              ResponseUtilisateurActivitesService services =
+                              ResponseUtilisateurActivitesService();
+
+                              // Verifica que codExamen no sea nulo
+                              if (widget.codActivites == null) {
+                                print("Error: codExamen es nulo");
+                                return;
+                              }
+
+                              ReponseUtilisateurActivites objResponse = ReponseUtilisateurActivites(
+                                codActivites: widget.codActivites,
+                                codUtils: codUtils,
+                                reponseActividad: userResponses,
+                              );
+
+                              if(await services.guardarResponse(objResponse)){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ResponseActivites(
+                                      userResponses: userResponses,
+                                      codActivites: widget.codActivites,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                            } catch (e) {
+                              // Manejo de errores
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Error al guardar la respuesta: $e')),
+                              );
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color:const Color.fromARGB(255, 0, 80, 74),
+
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "Terminer",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Icon(
+                                  FontAwesomeIcons.caretRight,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+
+
+                        /*OutlinedButton(
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor: Colors.black,
                                   backgroundColor:
@@ -756,47 +1069,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                   minimumSize: const Size(50, 40),
                                 ),
                                 onPressed: () async {
-                                  saveUserResponse(objActivites);
-                                  try {
-                                    final decodedToken = jsonDecode(utf8.decode(
-                                        base64Url.decode(base64Url.normalize(
-                                            globals.token.split(".")[1]))));
-                                    final codUtils = decodedToken['id'];
-                                    ResponseUtilisateurActivitesService
-                                        services =
-                                        ResponseUtilisateurActivitesService();
 
-                                    // Verifica que codExamen no sea nulo
-                                    if (widget.codActivites == null) {
-                                      print("Error: codExamen es nulo");
-                                      return;
-                                    }
-
-                                    ReponseUtilisateurActivites objResponse =
-                                        ReponseUtilisateurActivites(
-                                      codActivites: widget.codActivites,
-                                      codUtils: codUtils,
-                                      reponseActividad: userResponses,
-                                    );
-
-                                    await services.guardarResponse(objResponse);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ResponseActivites(
-                                          userResponses: userResponses,
-                                          codActivites: widget.codActivites,
-                                        ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    // Manejo de errores
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Error al guardar la respuesta: $e')),
-                                    );
-                                  }
                                 },
                                 child: const Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -815,7 +1088,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                                     ),
                                   ],
                                 ),
-                              ),
+                              ),*/
                       ),
                       if (_showFeedback)
                         Card(
@@ -835,7 +1108,6 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
                         ),
                     ],
                   ),
-                ),
               ],
             ),
           ),
@@ -845,55 +1117,7 @@ class _QuestionActivitesPageState extends State<QuestionActivitesPage> {
   }
 }
 
-Widget _buildDragTargetText(QuestionActivites objActivites) {
-  List<String> parts = objActivites.questionsActivites.split('___');
-  List<String?> acceptedOptions = List<String?>.filled(parts.length, null);
 
-  return StatefulBuilder(
-    builder: (BuildContext context, StateSetter setState) {
-      return Wrap(
-        children: parts.asMap().entries.map((entry) {
-          int index = entry.key;
-          String part = entry.value;
-
-          return part == ''
-              ? DragTarget<String>(
-                  onAccept: (String option) {
-                    setState(() {
-                      acceptedOptions[index] = option;
-                    });
-                  },
-                  builder: (context, candidateData, rejectedData) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        acceptedOptions[index] ?? '___________',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontFamily: 'DidotRegular',
-                        ),
-                      ),
-                    );
-                  },
-                )
-              : Text(
-                  part,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontFamily: 'DidotRegular',
-                  ),
-                );
-        }).toList(),
-      );
-    },
-  );
-}
 
 Widget _buildEditableText(QuestionActivites objActivites) {
   List<String> parts = objActivites.questionsActivites.split('___');
@@ -950,27 +1174,4 @@ Widget _buildEditableText(QuestionActivites objActivites) {
   );
 }
 
-bool _isAnswerValid(QuestionActivites objActivites) {
-  switch (objActivites.tipo) {
-    case 'écrire':
-    case 'écrire-image':
-    case 'écrire-audio':
-    case 'soulignez':
-      return objActivites.selectedOption != null &&
-          objActivites.selectedOption!.isNotEmpty;
 
-    case 'Selmultiple':
-    case 'vr/fa':
-    case 'vr/fa-audio':
-    case 'Selmultiple-audio':
-      return objActivites.selectedOption != null;
-
-    case 'ordre':
-    case 'deplacer':
-      return objActivites.optionsActivites.isNotEmpty &&
-          objActivites.hasMovedOption;
-
-    default:
-      return false;
-  }
-}

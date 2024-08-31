@@ -6,6 +6,7 @@ class QuestionActivites {
   String questionsActivites;
   List<String> optionsActivites;
   List<String> reponseActivites;
+  List<dynamic>?  imageAssociationReponse;
   String? retourActivites;
   String tipo;
   dynamic? codFichier;
@@ -20,6 +21,7 @@ class QuestionActivites {
     required this.questionsActivites,
     required this.optionsActivites,
     required this.reponseActivites,
+    this.imageAssociationReponse,
     required this.tipo,
     required this.retourActivites,
     this.codFichier,
@@ -38,6 +40,7 @@ class QuestionActivites {
       optionsActivites: List<String>.from(json['optionsActivites']),
       reponseActivites: List<String>.from(json['reponseActivites']),
       retourActivites: json['retourActivites'],
+      imageAssociationReponse: json['imageAssociationReponse'],
       tipo: json['tipo'],
       codFichier: json['codFichier'],
       codActivites: json['codActivites'],
@@ -55,6 +58,7 @@ class QuestionActivites {
       'optionsActivites': optionsActivites,
       'reponseActivites': reponseActivites,
       'retourActivites': retourActivites,
+      'imageAssociationReponse': imageAssociationReponse,
       'tipo': tipo,
       'codFichier': codFichier,
       'codActivites': codActivites,

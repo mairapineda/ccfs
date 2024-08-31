@@ -66,8 +66,7 @@ class _ActivitesxFigeesState extends State<ActivitesxFigees> {
 }
 
 Widget _generarCard(BuildContext context, Activites objActivites) {
-  var imagenActivites =
-      const Base64Decoder().convert(objActivites.base64Fichier);
+  var imagenActivites = const Base64Decoder().convert(objActivites.base64Fichier);
   return Align(
     alignment: Alignment.bottomCenter,
     child: Container(
