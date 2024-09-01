@@ -18,7 +18,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.initState();
     _controller = VideoPlayerController.network(widget.videoUrl)
       ..initialize().then((_) {
-        setState(() {}); // Actualiza el estado una vez que el video está inicializado
+        setState(() {});
       });
   }
 
@@ -32,7 +32,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Video Player'),
+        title: const Text('Video Player'),
       ),
       body: Center(
         child: _controller.value.isInitialized
@@ -40,7 +40,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 aspectRatio: _controller.value.aspectRatio,
                 child: VideoPlayer(_controller),
               )
-            : CircularProgressIndicator(),
+            : const CircularProgressIndicator(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

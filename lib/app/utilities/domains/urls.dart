@@ -3,7 +3,7 @@
 /* String API_URL = 'http://localhost:3344/'; */
 /* String API_URL = 'http://127.0.0.1:3200/'; */
 
-String API_URL = 'http://192.168.20.71:3200/';
+String API_URL = 'http://127.0.0.1:3200/';
 // end-points
 String API_SESION = '${API_URL}api/public/access';
 

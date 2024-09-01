@@ -75,10 +75,13 @@ class _ExpressionsList2State extends State<ExpressionsList2> {
   }
 
   void _playPauseAudio() async {
+    print("Reproduciendo audio");
     try {
       if (_isPlaying) {
+        print("Audio pausadp");
         await _audioPlayer.pause();
       } else if (_isPaused) {
+        print("Audio iniciado");
         await _audioPlayer.play();
       } else {
         Uint8List bytes =
@@ -88,7 +91,7 @@ class _ExpressionsList2State extends State<ExpressionsList2> {
         await _audioPlayer.play();
       }
     } catch (e) {
-      ('Error al reproducir/pausar el audio: $e');
+      print('Error al reproducir/pausar el audio: $e');
     }
   }
 

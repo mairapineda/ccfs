@@ -43,18 +43,16 @@ class _SesionState extends State<Sesion> {
                 ),
               ),
             ),
-            Positioned(
-              top: 5,
-              child: Container(
-                width: 340,
-                height: 240,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  shape: BoxShape.rectangle,
-                  image: const DecorationImage(
-                    image: AssetImage('images/base/FrameL.png'),
-                    fit: BoxFit.cover,
-                  ),
+            Container(
+              width: 340,
+              height: 240,
+              margin: const EdgeInsets.only(top: 5), // Añadir margen superior para espaciar
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                shape: BoxShape.rectangle,
+                image: const DecorationImage(
+                  image: AssetImage('images/base/FrameL.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -99,7 +97,9 @@ class _SesionState extends State<Sesion> {
                             if (textoCorreo!.isEmpty) {
                               return "Entrer l'adresse e-mail";
                             }
-                            if (!RegExp(patron).hasMatch(textoCorreo)) {}
+                            if (!RegExp(patron).hasMatch(textoCorreo)) {
+                              return "Adresse e-mail invalide";
+                            }
                             return null;
                           },
                           decoration: InputDecoration(
@@ -144,18 +144,15 @@ class _SesionState extends State<Sesion> {
                               ),
                               controller: _cajaClave,
                               validator: (textoClave) {
-                                String patron =
-                                    r"^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$";
                                 if (textoClave!.isEmpty) {
                                   return "Entrer le mot de passe";
                                 }
-                                if (!RegExp(patron).hasMatch(textoClave)) {}
                                 return null;
                               },
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderSide:
-                                      const BorderSide(color: Colors.white),
+                                  const BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(25),
                                 ),
                                 enabledBorder: OutlineInputBorder(
@@ -228,7 +225,7 @@ class _SesionState extends State<Sesion> {
                                             "Échec de l'authentification.\nVérifier les données d'identification.",
                                             style: TextStyle(
                                               color:
-                                                  Color.fromARGB(255, 0, 0, 0),
+                                              Color.fromARGB(255, 0, 0, 0),
                                               fontSize: 15,
                                               fontFamily: 'MonstserratSemiBold',
                                             ),
@@ -291,36 +288,34 @@ class _SesionState extends State<Sesion> {
                             ),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 5),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: InkWell(
-                              child: Row(
+                              child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
                                     'Se connecter Avec Google',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      fontFamily: 'MonstserratBold',
+                                      fontFamily: 'MonstserratLight',
                                       color: Colors.white,
                                     ),
                                   ),
-                                  SizedBox(width: 5),
-                                  Icon(
-                                    FontAwesomeIcons.google,
-                                    size: 10,
-                                    color: Color(0xFFF67B70),
-                                  ),
+
                                 ],
                               ),
+                              onTap: () {
+                                //_signInWithGoogle();
+                              },
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -329,6 +324,7 @@ class _SesionState extends State<Sesion> {
       ),
     );
   }
+
 
   void _limpiarCajas() {
     setState(() {
